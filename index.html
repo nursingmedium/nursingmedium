@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nursing Medium | Nursing Officer Mock Tests</title>
+<meta name="description" content="Nursing Medium — Nursing Officer exam preparation and mock tests.">
+<style>
+:root{--p:#155eef;--pd:#0b46c1;--ink:#101828;--muted:#667085;--bg:#f7f9fc;--line:#e4e7ec;--green:#12b76a}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}.container{width:min(1160px,calc(100% - 40px));margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}.logo{width:38px;height:38px;border-radius:12px;background:var(--p);color:white;display:grid;place-items:center;font-weight:900}
+.navlinks{display:flex;gap:26px;color:#475467;font-size:14px}.actions{display:flex;gap:10px}.btn{border:0;border-radius:11px;padding:12px 18px;font-weight:750}.primary{background:var(--p);color:#fff;box-shadow:0 8px 20px #155eef2b}.primary:hover{background:var(--pd)}.outline{background:#fff;border:1px solid var(--line)}
+.hero{padding:72px 0 52px;background:radial-gradient(circle at 85% 20%,#e8f0ff,transparent 36%),linear-gradient(#fff,#f7f9fc)}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:55px;align-items:center}.badge{display:inline-flex;align-items:center;gap:8px;background:#eef4ff;color:var(--p);padding:8px 12px;border-radius:999px;font-size:13px;font-weight:800}.dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+h1{font-size:clamp(40px,5vw,64px);line-height:1.03;letter-spacing:-2.5px;margin:18px 0}h1 span{color:var(--p)}.lead{font-size:18px;line-height:1.65;color:var(--muted);max-width:650px}.hero-cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}.trust{display:flex;gap:20px;margin-top:26px;color:#667085;font-size:13px;flex-wrap:wrap}
+.mock{background:#101828;color:#fff;border-radius:28px;padding:24px;box-shadow:0 25px 70px #10182833;transform:rotate(1deg)}.mini{display:flex;justify-content:space-between;color:#d0d5dd;font-size:12px}.progress{height:7px;background:#344054;border-radius:20px;margin:18px 0}.progress i{display:block;height:100%;width:72%;background:#2e90fa;border-radius:20px}.q{background:#182230;border:1px solid #344054;border-radius:18px;padding:20px}.q h3{font-size:15px;line-height:1.55;margin:0 0 15px}.opt{padding:12px;border:1px solid #475467;border-radius:10px;margin:8px 0;color:#eaecf0;font-size:13px}.opt.good{border-color:var(--green);background:#12b76a19}
+section{padding:78px 0}.head{text-align:center;max-width:700px;margin:0 auto 38px}.head h2{font-size:38px;letter-spacing:-1.2px;margin:0 0 10px}.head p{color:var(--muted);line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat,.feature,.test,.features,.price{background:#fff;border:1px solid var(--line);border-radius:18px}.stat{padding:22px}.stat b{font-size:28px}.stat span{display:block;color:var(--muted);font-size:13px;margin-top:5px}
+.package{display:grid;grid-template-columns:1fr 350px;gap:22px}.features,.price{padding:30px;box-shadow:0 18px 50px #1018280d}.features h3{font-size:25px;margin-top:0}.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:25px}.feature{padding:17px}.feature b{display:block;margin-bottom:5px}.feature span{color:var(--muted);font-size:13px;line-height:1.5}.price{border:2px solid #b2ccff;position:relative}.popular{position:absolute;right:18px;top:18px;background:#eef4ff;color:var(--p);padding:6px 9px;border-radius:8px;font-size:11px;font-weight:800}.amount{font-size:42px;font-weight:850;margin:18px 0 4px}.old{text-decoration:line-through;color:#98a2b3;font-size:14px}.checks{list-style:none;padding:0;margin:25px 0}.checks li{padding:9px 0;color:#475467;font-size:14px}.checks li:before{content:"✓";color:var(--green);font-weight:900;margin-right:9px}
+.tests{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.test{padding:20px}.testhead{display:flex;justify-content:space-between}.num{width:40px;height:40px;border-radius:12px;background:#eef4ff;color:var(--p);display:grid;place-items:center;font-weight:900}.test h3{margin:16px 0 6px}.test p{font-size:13px;color:var(--muted)}.tag{font-size:11px;background:#f2f4f7;padding:6px 8px;border-radius:7px;color:#475467}
+.cta{background:#101828;color:#fff;border-radius:28px;padding:48px;display:flex;justify-content:space-between;gap:30px;align-items:center}.cta h2{font-size:34px;margin:0 0 8px}.cta p{color:#d0d5dd;margin:0}
+footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--line)}
+.modal{display:none;position:fixed;inset:0;background:#10182899;z-index:50;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.box{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;position:relative}.close{position:absolute;right:18px;top:13px;border:0;background:none;font-size:26px;color:#667085}.group{margin:15px 0}.group label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.group input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px}
+@media(max-width:850px){.navlinks{display:none}.hero-grid,.package{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.tests{grid-template-columns:1fr 1fr}.feature-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.container{width:calc(100% - 28px)}.hero{padding-top:48px}h1{font-size:42px}.stats,.tests{grid-template-columns:1fr}.mock{transform:none}.cta{display:block;padding:30px}.cta .btn{margin-top:20px}}
+</style>
+</head>
+<body>
+<header><div class="container nav">
+<a class="brand" href="#"><div class="logo">N</div>Nursing Medium</a>
+<nav class="navlinks"><a href="#features">Why Us</a><a href="#tests">Mock Tests</a><a href="#package">Pricing</a><a href="#contact">Contact</a></nav>
+<div class="actions"><button class="btn outline" onclick="login()">Login</button><button class="btn primary" onclick="login()">Get Started</button></div>
+</div></header>
+
+<main>
+<section class="hero"><div class="container hero-grid"><div>
+<div class="badge"><i class="dot"></i> PGIMER Nursing Officer • 2026</div>
+<h1>Prepare smarter.<br><span>Practice like the exam.</span></h1>
+<p class="lead">Exam-level Nursing Officer mock tests designed to improve accuracy, speed and confidence before the real exam.</p>
+<div class="hero-cta"><button class="btn primary" onclick="document.getElementById('package').scrollIntoView()">View Mock Series →</button><button class="btn outline" onclick="demo()">Try Free Demo</button></div>
+<div class="trust"><span>✓ 100 Questions / Test</span><span>✓ 90 Minutes</span><span>✓ Detailed Explanations</span></div>
+</div>
+<div class="mock"><div class="mini"><span>PGIMER Mock 01</span><span>71:42</span></div><div class="progress"><i></i></div><div class="q"><div style="font-size:11px;color:#98a2b3;margin-bottom:10px">QUESTION 73 OF 100</div><h3>A patient receiving a blood transfusion develops chills and fever. What should the nurse do first?</h3><div class="opt">A. Slow the transfusion rate</div><div class="opt good">B. Stop the transfusion immediately</div><div class="opt">C. Administer an antipyretic</div><div class="opt">D. Reassure the patient</div></div></div>
+</div></section>
+
+<section id="features"><div class="container"><div class="head"><h2>Built for serious Nursing Officer preparation</h2><p>Everything you need to turn practice into measurable improvement.</p></div>
+<div class="stats"><div class="stat"><b>10</b><span>Full-length mock tests</span></div><div class="stat"><b>1000+</b><span>Practice questions planned</span></div><div class="stat"><b>90 min</b><span>Realistic timed experience</span></div><div class="stat"><b>24×7</b><span>Practice from any device</span></div></div></div></section>
+
+<section id="package"><div class="container"><div class="head"><h2>PGIMER Nursing Officer Mock Series</h2><p>Start with the complete beta package and build exam confidence one test at a time.</p></div>
+<div class="package"><div class="features"><h3>What's included</h3><div class="feature-grid">
+<div class="feature"><b>10 Full Tests</b><span>100 questions per mock with a 90-minute timer.</span></div>
+<div class="feature"><b>Detailed Rationales</b><span>Understand why the correct answer is correct.</span></div>
+<div class="feature"><b>Performance Analytics</b><span>Track score, accuracy, time and weak areas.</span></div>
+<div class="feature"><b>Answer Review</b><span>Review attempted, skipped and incorrect questions.</span></div>
+<div class="feature"><b>Mobile Friendly</b><span>Practice on phone, tablet or desktop.</span></div>
+<div class="feature"><b>Expert Review</b><span>Questions can be reviewed by a nursing subject expert.</span></div>
+</div></div>
+<div class="price"><div class="popular">BETA LAUNCH</div><div style="color:#667085;font-size:13px;margin-top:18px">PGIMER Mock Test Series</div><div class="amount">₹399</div><div class="old">₹799</div>
+<ul class="checks"><li>10 full-length mocks</li><li>100 questions each</li><li>Detailed explanations</li><li>Result & performance review</li><li>Access from any device</li></ul>
+<button class="btn primary" style="width:100%" onclick="login()">Start Preparation →</button><div style="font-size:11px;color:#98a2b3;text-align:center;margin-top:12px">Payment will be connected in the next setup step.</div></div></div></div></section>
+
+<section id="tests"><div class="container"><div class="head"><h2>Your mock test roadmap</h2><p>A simple progression from Mock 01 to Mock 10.</p></div><div class="tests" id="testGrid"></div></div></section>
+
+<section id="contact"><div class="container"><div class="cta"><div><h2>Ready to start your preparation?</h2><p>Join Nursing Medium and practice with a focused mock-test experience.</p></div><button class="btn primary" onclick="login()">Create Student Account →</button></div></div></section>
+</main>
+<footer><div class="container">© 2026 Nursing Medium. All rights reserved.</div></footer>
+
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeLogin()">×</button><div class="brand"><div class="logo">N</div>Nursing Medium</div><h2 style="margin:24px 0 5px">Student Login</h2><p style="color:#667085;font-size:14px">V1 preview — real authentication comes next.</p><div class="group"><label>Email</label><input type="email" placeholder="you@example.com"></div><div class="group"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn primary" style="width:100%" onclick="alert('Demo only. Supabase authentication will be connected next.')">Continue →</button></div></div>
+
+<script>
+const grid=document.getElementById('testGrid');
+for(let i=1;i<=10;i++)grid.innerHTML+=`<div class="test"><div class="testhead"><div class="num">${String(i).padStart(2,'0')}</div><span class="tag">Locked</span></div><h3>PGIMER Mock Test ${String(i).padStart(2,'0')}</h3><p>Full-length Nursing Officer practice test.</p><span class="tag">100 Questions</span> <span class="tag">90 Minutes</span></div>`;
+function login(){document.getElementById('modal').classList.add('show')}function closeLogin(){document.getElementById('modal').classList.remove('show')}
+function demo(){alert('Free Demo Test will be connected to the real test engine next.')}
+window.onclick=e=>{if(e.target.id==='modal')closeLogin()};
+</script>
+</body></html>
