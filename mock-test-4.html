@@ -115,18 +115,79 @@ function gate(title,message,login){
  link.textContent=login?"Login / Create Account":"Unlock Premium Tests";
  actions.append(link);
 }
-async function checkPremiumAccess(){
- if(!sb){gate("Connection unavailable","Unable to load authentication. Check your connection and refresh.",true);return false;}
- try{
-  const {data:{user},error:authError}=await sb.auth.getUser();
-  if(authError||!user){window.location.replace("/login?next=%2Fmock-test-4.html");return false;}
-  const {data,error}=await sb.from("purchases").select("id").eq("user_id",user.id).eq("status","paid").limit(1);
-  
-const {data,error}=await sb.from("purchases")
-  .select("id")
-  .eq("user_id",user.id)
-  .eq("status","paid")
-  .limit(1);
+
+async function checkPremiumAccess() {
+  if (!sb) {
+    gate(
+      "Connection unavailable",
+      "Authentication service could not load. Please refresh.",
+      true
+    );
+    return false;
+  }
+
+  try {
+    const { data: authData, error: authError } =
+      await sb.auth.getUser();
+
+    if (authError || !authData?.user) {
+      window.location.replace(
+        "/login?next=%2Fmock-test-4.html"
+      );
+      return false;
+    }
+
+    const user = authData.user;
+
+    const { data, error } = await sb
+      .from("purchases")
+      .select("id,package_id,status")
+      .eq("user_id", user.id)
+      .eq("status", "paid")
+      .limit(1);
+
+    if (error) {
+      console.error(
+        "Nursing Medium premium verification:",
+        error.code,
+        error.message,
+        error.details
+      );
+
+      gate(
+        "Verification unavailable",
+        "We couldn't check your premium access. Please try again shortly.",
+        false
+      );
+      return false;
+    }
+
+    if (!data || data.length === 0) {
+      gate(
+        "Premium Access Required",
+        "Please purchase the premium package to unlock Mock Test 4.",
+        false
+      );
+      return false;
+    }
+
+    document.getElementById("accessGate").remove();
+    document.getElementById("exam").style.display = "grid";
+
+    startExam();
+    return true;
+
+  } catch (err) {
+    console.error("Premium access exception:", err);
+
+    gate(
+      "Verification unavailable",
+      "Unable to connect to the verification service. Please refresh and try again.",
+      false
+    );
+    return false;
+  }
+}
 
 if(error){
   console.error("SUPABASE PURCHASE ERROR:",error);
