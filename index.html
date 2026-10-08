@@ -22,7 +22,7 @@ section{padding:78px 0}.head{text-align:center;max-width:700px;margin:0 auto 38p
 .tests{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.test{padding:20px}.testhead{display:flex;justify-content:space-between}.num{width:40px;height:40px;border-radius:12px;background:#eef4ff;color:var(--p);display:grid;place-items:center;font-weight:900}.test h3{margin:16px 0 6px}.test p{font-size:13px;color:var(--muted)}.tag{font-size:11px;background:#f2f4f7;padding:6px 8px;border-radius:7px;color:#475467}
 .cta{background:#101828;color:#fff;border-radius:28px;padding:48px;display:flex;justify-content:space-between;gap:30px;align-items:center}.cta h2{font-size:34px;margin:0 0 8px}.cta p{color:#d0d5dd;margin:0}
 footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--line)}
-.modal{display:none;position:fixed;inset:0;background:#10182899;z-index:50;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.box{width:min(430px,100%);background:#fff;border-radius:22px;padding:28px;position:relative}.close{position:absolute;right:18px;top:13px;border:0;background:none;font-size:26px;color:#667085}.group{margin:15px 0}.group label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}.group input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px}
+
 @media(max-width:850px){.navlinks{display:none}.hero-grid,.package{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.tests{grid-template-columns:1fr 1fr}.feature-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.container{width:calc(100% - 28px)}.hero{padding-top:48px}h1{font-size:42px}.stats,.tests{grid-template-columns:1fr}.mock{transform:none}.cta{display:block;padding:30px}.cta .btn{margin-top:20px}}
 </style>
@@ -31,7 +31,7 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 <header><div class="container nav">
 <a class="brand" href="#"><div class="logo">N</div>Nursing Medium</a>
 <nav class="navlinks"><a href="#features">Why Us</a><a href="#tests">Mock Tests</a><a href="#package">Pricing</a><a href="#contact">Contact</a></nav>
-<div class="actions"><button class="btn outline" onclick="login()">Login</button><button class="btn primary" onclick="login()">Get Started</button></div>
+<div class="actions"><button class="btn outline" onclick="goToLogin()">Login</button><button class="btn primary" onclick="goToLogin()">Get Started</button></div>
 </div></header>
 
 <main>
@@ -63,12 +63,11 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 
 <section id="tests"><div class="container"><div class="head"><h2>Your mock test roadmap</h2><p>A simple progression from Mock 01 to Mock 10.</p></div><div class="tests" id="testGrid"></div></div></section>
 
-<section id="contact"><div class="container"><div class="cta"><div><h2>Ready to start your preparation?</h2><p>Join Nursing Medium and practice with a focused mock-test experience.</p></div><button class="btn primary" onclick="login()">Create Student Account →</button></div></div></section>
+<section id="contact"><div class="container"><div class="cta"><div><h2>Ready to start your preparation?</h2><p>Join Nursing Medium and practice with a focused mock-test experience.</p></div><button class="btn primary" onclick="goToLogin()">Create Student Account →</button></div></div></section>
 </main>
 <footer><div class="container">© 2026 Nursing Medium. All rights reserved.</div></footer>
 
-<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeLogin()">×</button><div class="brand"><div class="logo">N</div>Nursing Medium</div><h2 style="margin:24px 0 5px">Student Login</h2><p style="color:#667085;font-size:14px">V1 preview — real authentication comes next.</p><div class="group"><label>Email</label><input type="email" placeholder="you@example.com"></div><div class="group"><label>Password</label><input type="password" placeholder="••••••••"></div><button class="btn primary" style="width:100%" onclick="alert('Demo only. Supabase authentication will be connected next.')">Continue →</button></div></div>
-
+<!-- Real authentication is handled on /login -->
 <script>
 const grid=document.getElementById('testGrid');
 for(let i=1;i<=10;i++){
@@ -85,10 +84,7 @@ for(let i=1;i<=10;i++){
     ${live ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-${i}.html">Start Mock Test ${i} →</a>` : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
   </div>`;
 }
-function login(){document.getElementById('modal').classList.add('show')}
-function closeLogin(){document.getElementById('modal').classList.remove('show')}
-function demo(){window.location.href='/mock-test-1'}
+function goToLogin(){window.location.href='/login'}
 function comingSoon(){alert('This mock test will be available soon.')}
-window.onclick=e=>{if(e.target.id==='modal')closeLogin()};
 </script>
 </body></html>
