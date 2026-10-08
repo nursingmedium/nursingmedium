@@ -70,6 +70,8 @@ button.primary{width:100%;margin-top:20px;padding:14px;border:0;border-radius:10
 const SUPABASE_URL = "https://yctpbctqsvdjcrrovocs.supabase.co";
 const SUPABASE_KEY = "sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const nextParam = new URLSearchParams(location.search).get("next");
+const nextPath = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard.html";
 
 let mode = "login";
 
@@ -151,7 +153,7 @@ authForm.addEventListener("submit", async function(e){
         password: password.value,
         options:{
           data:{full_name: fullName.value.trim()},
-          emailRedirectTo: location.origin + "/dashboard.html"
+          emailRedirectTo: location.origin + nextPath
         }
       });
 
@@ -166,7 +168,7 @@ authForm.addEventListener("submit", async function(e){
       });
 
       if(result.error) throw result.error;
-      location.href = "/dashboard.html";
+      location.href = nextPath;
     }
   }catch(error){
     showMessage(error.message || "Something went wrong. Please try again.", true);
