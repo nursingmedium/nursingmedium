@@ -13,7 +13,7 @@ header{background:#095CF8;color:white;padding:17px 22px;position:sticky;top:0;z-
 .brand{font-size:17px;font-weight:800}
 .sub{font-size:12px;color:#dbeafe;margin-top:5px}
 .timer{font-size:24px;font-weight:800;background:#174FC6;color:white;padding:10px 15px;border-radius:10px;white-space:nowrap}
-main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;padding:0 14px}
+main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;padding:0 14px}
 .card{background:white;border:1px solid #dbe3ef;border-radius:16px;padding:22px;box-shadow:0 5px 18px #0000000a}
 .badge{display:inline-block;background:#eaf2ff;color:#095CF8;padding:6px 11px;border-radius:99px;font-size:12px;font-weight:800}
 .qnum{color:#64748b;font-size:13px;font-weight:700;margin:15px 0}
@@ -56,13 +56,14 @@ main{grid-template-columns:1fr}
 <div class="top">
 <div>
 <div class="brand">Nursing Medium — PGIMER Nursing Officer</div>
-<div class="sub">Mock Test 4 • 110 Advanced MCQs • Local Preview • 90 Minutes</div>
+<div class="sub">Mock Test 4 • 110 Advanced MCQs • 90 Minutes</div>
 </div>
 <div class="timer" id="timer">90:00</div>
 </div>
 </header>
 
-<main id="exam">
+<div id="accessGate" style="min-height:55vh;display:grid;place-items:center;padding:24px"><div class="card" style="max-width:520px;text-align:center"><h2 id="gateTitle">Verifying Premium Access…</h2><p id="gateMessage" role="status" aria-live="polite">Checking your login and verified purchase.</p><div id="gateActions"></div></div></div>
+<main id="exam" style="display:none">
 <section class="card">
 <span class="badge" id="topic"></span>
 <div class="qnum" id="qnum"></div>
@@ -94,153 +95,88 @@ main{grid-template-columns:1fr}
 <div id="topics"></div>
 <h3>Complete Answer Review</h3>
 <div id="reviews"></div>
-<button class="primary" onclick="location.reload()">Restart Test</button>
+<button class="primary" onclick="localStorage.removeItem(storageKey+userId);location.reload()">Restart Test</button>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
-const raw = [
-["Cardiology","A patient with an inferior-wall MI becomes hypotensive after nitroglycerin. Lungs remain clear, and jugular veins are distended. Which complication is most likely?","Acute left ventricular pulmonary edema","Right ventricular infarction with preload dependence","Aortic regurgitation","Pulmonary venous hypertension",1,"Inferior MI with clear lungs, elevated JVP and nitrate-associated hypotension suggests right ventricular involvement. Preload reduction may worsen cardiac output."],
-["Cardiology","An ICU patient has a regular wide-complex tachycardia at 170/min, BP 72/40 mmHg and altered mentation. A pulse is present. Which intervention is indicated?","Vagal maneuvers only","Unscheduled defibrillation for every wide-complex rhythm","Immediate synchronized cardioversion","Observation until troponin results",2,"Unstable tachycardia with a pulse generally requires immediate synchronized cardioversion."],
-["Cardiology","Following acute MI, a patient develops a new harsh systolic murmur, pulmonary edema and shock. Which mechanical complication is most concerning?","Ventricular septal rupture","Sinus tachycardia","Uncomplicated pericarditis","Stable mitral valve prolapse",0,"A new harsh murmur and cardiogenic shock after MI may indicate ventricular septal rupture, requiring urgent echocardiography and specialist intervention."],
-["Cardiology","A patient receiving amiodarone develops bradycardia, QT prolongation and recurrent polymorphic ventricular tachycardia. Which electrolyte abnormality increases the risk?","Hypernatremia","Hyperphosphatemia","Hyperchloremia","Hypomagnesemia",3,"Low magnesium facilitates torsades de pointes, especially in patients with prolonged QT intervals."],
-["Cardiology","A patient with suspected cardiac tamponade has BP 78/46 mmHg, muffled heart sounds and raised JVP. Which finding would further support tamponade?","Wide pulse pressure","Inspiratory systolic BP fall greater than 10 mmHg","Bounding peripheral pulses","Severe systemic hypertension",1,"Pulsus paradoxus, an exaggerated inspiratory decline in systolic pressure, supports tamponade physiology."],
-["Cardiology","A patient with heart failure receives aggressive diuresis and develops weakness, U waves and frequent PVCs. Which abnormality is most likely?","Hyperkalemia","Hypercalcemia","Hypokalemia","Hypermagnesemia",2,"Loop diuretics can cause potassium depletion, producing U waves and ventricular dysrhythmias."],
-["Cardiology","A patient has symptomatic bradycardia at 32/min with hypotension. Atropine is ineffective. What should the team prepare for?","Transcutaneous pacing","Oral verapamil","Routine discharge","Carotid sinus massage",0,"Persistent unstable bradycardia despite atropine requires rapid pacing and/or appropriate chronotropic support."],
-["Cardiology","An ECG shows ST elevation in II, III and aVF. Which additional lead is particularly useful when right ventricular infarction is suspected?","V6","aVL","V1 only","V4R",3,"Right-sided lead V4R is useful for detecting right ventricular involvement in inferior MI."],
-["Cardiology","A patient receiving dobutamine for cardiogenic shock develops HR 150/min and worsening chest pain. What is the priority nursing response?","Increase the dose automatically","Reassess perfusion and urgently report possible drug-induced ischemia or tachyarrhythmia","Stop all cardiac monitoring","Give oral potassium without testing",1,"Dobutamine may increase myocardial oxygen demand and precipitate tachyarrhythmia or ischemia."],
-["Cardiology","After PCI, a patient develops sudden hypotension, flank pain and falling hemoglobin without obvious external bleeding. Which complication is most likely?","Pulmonary fibrosis","Acute pancreatitis","Retroperitoneal hemorrhage","Hypothyroidism",2,"Occult retroperitoneal bleeding after femoral arterial access can present with shock, flank pain and reduced hemoglobin."],
+const SUPABASE_URL="https://yctpbctqsvdjcrrovocs.supabase.co";
+const SUPABASE_KEY="sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
+const sb=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
+function gate(title,message,login){
+ document.getElementById("gateTitle").textContent=title;
+ document.getElementById("gateMessage").textContent=message;
+ const actions=document.getElementById("gateActions");
+ actions.replaceChildren();
+ const link=document.createElement("a");
+ link.className="primary";link.style.cssText="display:inline-block;padding:12px 20px;border-radius:10px;text-decoration:none;margin-top:12px";
+ link.href=login?"/login.html?next=%2Fmock-test-4.html":"/#package";
+ link.textContent=login?"Login / Create Account":"Unlock Premium Tests";
+ actions.append(link);
+}
 
-["Respiratory","A ventilated patient suddenly develops hypotension, absent right breath sounds and high peak airway pressure. Which action has highest priority?","Emergency assessment and decompression for suspected tension pneumothorax","Increase PEEP immediately","Delay assessment until routine X-ray","Give oral bronchodilator",0,"Tension pneumothorax can cause obstructive shock and requires immediate emergency treatment."],
-["Respiratory","An ARDS patient has PaO2 58 mmHg on FiO2 0.80. What is the approximate PaO2/FiO2 ratio?","290","145","116","73",3,"The ratio is 58 divided by 0.80, approximately 73, consistent with severe oxygenation impairment under appropriate ARDS diagnostic conditions."],
-["Respiratory","A COPD patient has pH 7.28, PaCO2 68 mmHg and HCO3 31 mEq/L. Which interpretation is most appropriate?","Fully compensated metabolic alkalosis","Acute-on-chronic respiratory acidosis","Pure metabolic acidosis","Uncompensated respiratory alkalosis",1,"Elevated PaCO2 with acidemia indicates respiratory acidosis; elevated bicarbonate suggests chronic renal compensation."],
-["Respiratory","During endotracheal suctioning, a patient develops severe bradycardia and SpO2 76%. What should the nurse do immediately?","Continue suctioning for 30 seconds","Increase negative suction pressure","Stop suctioning and reoxygenate","Disconnect oxygen permanently",2,"Suctioning can provoke hypoxemia and vagal bradycardia; immediately stop the procedure and restore oxygenation."],
-["Respiratory","A ventilator displays a low-pressure alarm and exhaled tidal volume falls abruptly. Which problem should be checked first?","Circuit disconnection or leak","Bronchospasm causing high resistance","Severe mucus plugging","Pneumothorax with high pressure",0,"Low-pressure alarms commonly indicate circuit disconnection, cuff leak or another major air leak."],
-["Respiratory","A patient with severe asthma becomes drowsy and PaCO2 increases from 30 to 49 mmHg despite treatment. What does this suggest?","Complete recovery","Expected bronchodilator effect","Mild anxiety","Respiratory muscle fatigue and impending ventilatory failure",3,"A rising or normalizing PaCO2 in severe asthma can indicate worsening ventilation and exhaustion."],
-["Respiratory","A patient develops dyspnea after central venous catheter insertion. Ultrasound shows absent lung sliding on the affected side. What should be suspected?","Pulmonary edema only","Pneumothorax","Pleural effusion exclusively","Atelectasis with certainty",1,"Absent lung sliding can support pneumothorax in the appropriate clinical context, though it is not completely specific."],
-["Respiratory","A patient on high-flow oxygen becomes increasingly somnolent with poor respiratory effort. What is the most appropriate next step?","Continue unchanged for several hours","Give sedatives to improve tolerance","Urgent airway and ventilation assessment for possible intubation","Remove all oxygen",2,"Failure of respiratory drive or airway protection requires immediate escalation beyond oxygen therapy alone."],
-["Respiratory","A patient with suspected pulmonary embolism is hypotensive with severe hypoxemia and right ventricular strain. Which condition is present?","High-risk pulmonary embolism","Simple bronchitis","Uncomplicated atelectasis","Stable chronic thromboembolism",0,"Hemodynamic instability with suspected PE is high risk and warrants emergency multidisciplinary management."],
-["Respiratory","A chest drainage system shows new continuous bubbling in the water-seal chamber. What is the most appropriate first action?","Clamp the tube indefinitely","Strip the tube repeatedly","Remove the tube without orders","Check the system and insertion site for an air leak",3,"Continuous bubbling may indicate an air leak; systematically assess the connections, tubing and insertion site."],
-
-["Neurology","A patient with head injury develops BP 190/70 mmHg, HR 42/min and irregular respirations. What does this pattern suggest?","Hypoglycemia","Cushing response associated with raised intracranial pressure","Early dehydration","Neurogenic shock",1,"Hypertension with widened pulse pressure, bradycardia and irregular breathing suggests critically elevated ICP."],
-["Neurology","A patient with acute ischemic stroke is being evaluated for IV thrombolysis. Which finding is a major immediate concern?","Mild unilateral weakness","Age over 40 years","Intracranial hemorrhage on CT","Onset less than one hour ago",2,"Intracranial bleeding must be excluded before IV thrombolysis."],
-["Neurology","During a generalized tonic-clonic seizure, which nursing action is correct?","Protect the head, clear hazards and time the seizure","Insert a padded tongue blade","Restrain the limbs firmly","Give oral medication during convulsions",0,"Seizure care prioritizes injury prevention, airway observation and timing; nothing should be inserted into the mouth."],
-["Neurology","A patient with Guillain-Barré syndrome develops weak cough and declining vital capacity. Which complication requires immediate attention?","Chronic constipation","Skin dryness","Mild headache","Impending respiratory failure",3,"Progressive neuromuscular weakness can compromise ventilation and airway clearance."],
-["Neurology","A patient with a T5 spinal injury develops pounding headache, flushing and BP 205/110 mmHg. What should the nurse do first?","Place the patient supine","Sit upright and evaluate bladder or bowel triggers","Give a large IV fluid bolus","Apply tight abdominal binding",1,"Autonomic dysreflexia requires immediate upright positioning and removal of triggering stimuli."],
-["Neurology","A patient with suspected bacterial meningitis has fever, neck stiffness and a purpuric rash. Which precaution is appropriate initially?","Contact precautions only","No isolation","Droplet precautions","Protective positive-pressure isolation",2,"Suspected meningococcal infection requires droplet precautions along with urgent treatment."],
-["Neurology","A patient receiving alteplase develops sudden headache, vomiting and worsening neurological deficit. What is the priority?","Stop the infusion if ongoing and urgently evaluate for intracranial hemorrhage","Give aspirin immediately","Continue therapy without assessment","Encourage ambulation",0,"Acute deterioration during thrombolysis suggests potentially catastrophic intracranial bleeding."],
-["Neurology","A patient with myasthenia gravis develops dysphagia, weak voice and reduced respiratory effort. Which assessment is most important?","Routine visual acuity","Bowel movement history","Peripheral edema","Respiratory strength and airway protection",3,"Bulbar and respiratory weakness may indicate myasthenic crisis."],
-["Neurology","A patient with increased ICP requires positioning. Which position is generally preferred when not contraindicated?","Flat with marked neck rotation","Head elevated about 30 degrees with neutral neck alignment","Trendelenburg","Prone with head dependent",1,"Head elevation and neutral alignment can facilitate cerebral venous drainage."],
-["Neurology","A stroke patient coughs while attempting to swallow water. Which action is appropriate?","Continue oral fluids slowly","Offer a larger volume","Keep NPO and arrange swallowing assessment","Give tablets with water",2,"Coughing with swallowing suggests aspiration risk; oral intake should be withheld pending appropriate assessment."],
-
-["Endocrine","A DKA patient has potassium 2.8 mEq/L before insulin therapy. Which action is safest?","Address hypokalemia before initiating insulin according to protocol","Start high-dose insulin immediately","Give bicarbonate routinely","Restrict all IV fluids",0,"Insulin lowers serum potassium further and may precipitate life-threatening arrhythmias."],
-["Endocrine","During DKA treatment, glucose decreases to 190 mg/dL but the anion gap remains elevated. Which principle is correct?","Stop all insulin permanently","Stop electrolyte monitoring","Give oral glucose only","Continue insulin with added dextrose as required until ketoacidosis resolves",3,"Ketone clearance may lag behind glucose reduction; dextrose permits continued insulin treatment."],
-["Endocrine","A patient with SIADH has Na 116 mEq/L and a seizure. What is the immediate priority?","Give hypotonic fluids","Airway support and emergency treatment of severe symptomatic hyponatremia","Encourage unrestricted water","Wait for morning laboratory results",1,"Seizures with severe hyponatremia are an emergency; controlled hypertonic saline treatment may be indicated."],
-["Endocrine","A postoperative pituitary patient has urine output 450 mL/hr, Na 153 mEq/L and very dilute urine. What is most likely?","SIADH","Adrenal crisis","Central diabetes insipidus","Hypothyroidism",2,"Large volumes of dilute urine and hypernatremia after pituitary surgery suggest deficient ADH activity."],
-["Endocrine","A patient with adrenal insufficiency develops vomiting, BP 70/40 mmHg, hyponatremia and hyperkalemia. Which treatment should be anticipated?","IV hydrocortisone and isotonic fluid resuscitation","Fluid restriction alone","IV insulin as sole therapy","Oral thyroid hormone only",0,"Adrenal crisis requires prompt glucocorticoid replacement and circulatory support."],
-["Endocrine","A patient with thyroid storm has fever 40°C, HR 160/min, agitation and diarrhea. Which action is appropriate?","Apply warming blankets","Delay treatment until TSH returns","Give iodine before all other medication regardless of timing","Initiate emergency supportive care and prescribed antithyroid therapy",3,"Thyroid storm is life-threatening and requires rapid supportive and targeted treatment."],
-["Endocrine","Following thyroidectomy, a patient develops tingling around the mouth and carpopedal spasm. Which laboratory abnormality is most likely?","Hypernatremia","Hypocalcemia","Hyperkalemia","Hyperphosphatemia",1,"Parathyroid injury or reduced function after thyroid surgery may cause symptomatic hypocalcemia."],
-["Endocrine","A conscious diabetic patient has blood glucose 48 mg/dL and can swallow safely. What is the immediate action?","Give long-acting insulin","Encourage exercise","Administer fast-acting oral carbohydrate and recheck glucose","Wait until the next meal",2,"Conscious patients who can swallow should receive rapid carbohydrate with reassessment."],
-["Endocrine","A patient with hyperosmolar hyperglycemic state has glucose 850 mg/dL, profound dehydration and minimal ketosis. Which initial management principle is essential?","Carefully monitored isotonic fluid replacement","Immediate fluid restriction","Routine bicarbonate for every patient","Avoid electrolyte monitoring",0,"Severe volume depletion is central to HHS management; fluid and electrolyte correction require careful monitoring."],
-["Endocrine","A patient on long-term glucocorticoids stops treatment abruptly and develops severe weakness, hypotension and vomiting. What is most likely?","Acute hyperthyroidism","Hyperparathyroidism","Insulin overdose","Acute adrenal insufficiency",3,"Abrupt steroid withdrawal can cause adrenal crisis due to suppressed hypothalamic-pituitary-adrenal function."],
-
-["Renal","A patient with AKI has potassium 7.1 mEq/L, widening QRS complexes and muscle weakness. Which medication should be prioritized for membrane stabilization?","Furosemide orally","IV calcium as prescribed","Oral sodium supplements","Vitamin D",1,"IV calcium stabilizes cardiac membranes during severe hyperkalemia while potassium-lowering measures are initiated."],
-["Renal","A hemodialysis patient develops headache, confusion and seizures shortly after starting an initial aggressive dialysis session. What is suspected?","Hyperthyroidism","Pulmonary embolism","Dialysis disequilibrium syndrome","Chronic neuropathy",2,"Rapid osmotic changes during dialysis may produce cerebral edema and neurological symptoms."],
-["Renal","A patient with nephrotic syndrome develops sudden unilateral leg swelling. Which complication is particularly important?","Venous thrombosis due to a hypercoagulable state","Acute appendicitis","Hyperthyroidism","Simple muscle fatigue",0,"Nephrotic syndrome increases thrombotic risk through urinary loss of anticoagulant proteins and other changes."],
-["Renal","A patient with acute glomerulonephritis has cola-colored urine, hypertension and periorbital edema. Which monitoring priority is most appropriate?","Visual acuity only","Hearing assessment only","Daily exercise tolerance alone","Fluid balance, blood pressure and renal function",3,"Glomerular inflammation can cause sodium-water retention, hypertension and impaired renal function."],
-["Renal","A dialysis patient with an AV fistula has no palpable thrill. What should the nurse do?","Apply a tight tourniquet","Report urgently for possible access thrombosis","Use the fistula for blood pressure measurement","Massage forcefully",1,"Loss of thrill can indicate fistula occlusion and threatens dialysis access."],
-["Renal","A patient with AKI receives IV fluids and develops crackles, worsening hypoxemia and rising JVP. Which action is appropriate?","Increase fluid infusion","Encourage additional oral fluids","Reassess fluid administration and escalate suspected pulmonary edema","Position flat",2,"Fluid overload in renal impairment may cause life-threatening pulmonary edema."],
-["Renal","A patient with rhabdomyolysis has CK 25,000 U/L and dark urine. Which complication should be anticipated?","Acute kidney injury","Isolated hypothyroidism","Iron deficiency anemia","Chronic liver cirrhosis",0,"Myoglobin-related tubular injury and volume depletion increase AKI risk in rhabdomyolysis."],
-["Renal","During peritoneal dialysis, the outflow becomes cloudy and the patient has abdominal pain. What is the priority?","Continue without assessment","Increase dextrose concentration independently","Discard the sample without testing","Evaluate urgently for peritonitis and obtain prescribed effluent studies",3,"Cloudy effluent with abdominal pain strongly suggests PD-associated peritonitis."],
-
-["Pharmacology","A patient receiving unfractionated heparin develops a platelet fall greater than 50% on day 7 and a new DVT. What should be suspected?","Iron deficiency","Heparin-induced thrombocytopenia","Vitamin B12 deficiency","Aspirin toxicity",1,"A substantial platelet decline 5–10 days after heparin with thrombosis suggests immune-mediated HIT."],
-["Pharmacology","A patient on warfarin develops intracranial bleeding and INR 6.5. Which treatment is commonly anticipated?","Extra warfarin","Aspirin loading","Urgent reversal with IV vitamin K and four-factor PCC when appropriate","Routine oral iron",2,"Major warfarin-associated bleeding requires rapid anticoagulation reversal."],
-["Pharmacology","A patient taking digoxin develops nausea, visual halos, HR 44/min and potassium 2.9 mEq/L. What is the safest action?","Hold digoxin and urgently assess for toxicity","Give another digoxin dose","Increase loop diuretics automatically","Encourage strenuous exercise",0,"Bradycardia, visual changes and gastrointestinal symptoms suggest digoxin toxicity, worsened by hypokalemia."],
-["Pharmacology","A patient receiving vancomycin develops flushing and pruritus during a rapid infusion without airway compromise. Which reaction is most likely?","Serotonin syndrome","Neuroleptic malignant syndrome","Acute opioid withdrawal","Vancomycin infusion reaction",3,"Rapid infusion can trigger a histamine-mediated vancomycin infusion reaction."],
-["Pharmacology","A patient on lithium develops coarse tremor, ataxia, vomiting and confusion. What is the priority?","Administer the next dose","Hold lithium and urgently assess level and renal function","Start sodium restriction","Add a thiazide diuretic",1,"Neurological and gastrointestinal findings suggest lithium toxicity; renal impairment and sodium depletion can increase lithium levels."],
-["Pharmacology","A patient receiving IV gentamicin reports new tinnitus and reduced urine output. What is most concerning?","Hypoglycemia","Serotonin syndrome","Ototoxicity and nephrotoxicity","Hyperthyroidism",2,"Aminoglycosides may damage renal and vestibulocochlear function."],
-["Pharmacology","A patient taking an ACE inhibitor develops lip swelling, tongue enlargement and stridor. Which response is appropriate?","Urgent airway management and discontinuation of the suspected drug","Continue the medication","Offer oral water only","Wait for rash to develop",0,"ACE-inhibitor angioedema may rapidly obstruct the airway, even without urticaria."],
-["Pharmacology","A patient receives morphine and becomes difficult to arouse with RR 6/min. Which drug should be prepared?","Protamine","Vitamin K","Atropine as sole reversal","Naloxone",3,"Naloxone reverses opioid effects while airway and ventilation support are provided."],
-["Pharmacology","A patient taking linezolid and sertraline develops agitation, hyperthermia, clonus and hyperreflexia. What is suspected?","Malignant hyperthermia","Serotonin syndrome","Simple anxiety","Hypocalcemia",1,"Clonus and hyperreflexia with autonomic instability after serotonergic exposure strongly suggest serotonin toxicity."],
-["Pharmacology","A patient receives an IV potassium infusion and develops pain, swelling and coolness at the cannula site. What is the priority?","Increase the rate","Flush rapidly","Stop infusion and assess infiltration or extravasation","Ignore local symptoms",2,"Potassium solutions can cause tissue injury; suspected infiltration requires prompt interruption and assessment."],
-
-["Obstetrics","A postpartum patient has heavy bleeding, a boggy uterus and BP 84/48 mmHg. What is the first nursing action?","Initiate immediate uterine massage and activate hemorrhage management","Wait for hemoglobin results","Encourage ambulation","Give oral iron",0,"Uterine atony is a common cause of postpartum hemorrhage; immediate uterine massage and coordinated resuscitation are needed."],
-["Obstetrics","A woman at 34 weeks has painless bright-red vaginal bleeding. Which examination should be avoided until placental location is known?","Abdominal ultrasound","Maternal pulse measurement","External fetal monitoring","Digital vaginal examination",3,"Placenta previa must be excluded before digital examination because manipulation can provoke severe bleeding."],
-["Obstetrics","A pregnant patient develops painful vaginal bleeding, a rigid tender uterus and fetal distress. What is most likely?","Placenta previa","Placental abruption","Normal bloody show","Cervical polyp",1,"Painful bleeding with uterine hypertonicity and fetal compromise is characteristic of placental abruption."],
-["Obstetrics","During oxytocin induction, contractions occur every 90 seconds and recurrent late decelerations develop. What should the nurse do first?","Increase oxytocin","Encourage bearing down","Stop oxytocin and initiate intrauterine resuscitation","Continue without changes",2,"Uterine tachysystole can reduce placental perfusion; discontinue oxytocin and respond to fetal compromise."],
-["Obstetrics","A woman with severe preeclampsia receiving magnesium sulfate develops absent reflexes and RR 8/min. Which action is appropriate?","Stop magnesium, support breathing and prepare calcium gluconate","Increase magnesium","Encourage walking","Administer oral sedatives",0,"Absent reflexes and respiratory depression indicate magnesium toxicity."],
-["Obstetrics","Immediately after rupture of membranes, fetal bradycardia occurs and the umbilical cord is visible at the introitus. What is the priority?","Push the cord back into the uterus","Allow the patient to walk","Continue oxytocin","Relieve cord compression and call for emergency delivery",3,"Cord prolapse threatens fetal oxygenation; manually elevate the presenting part and activate emergency obstetric management."],
-["Obstetrics","A laboring patient has a previous uterine scar and develops sudden abdominal pain, loss of fetal station and fetal bradycardia. What is suspected?","Normal transition phase","Uterine rupture","Placenta accreta without bleeding","Mild dehydration",1,"Sudden pain, loss of station and fetal compromise in a scarred uterus suggest rupture."],
-["Obstetrics","A patient with postpartum hemorrhage continues bleeding despite a firm uterus. Which cause should be assessed?","Physiological lochia only","Normal involution","Genital tract trauma or retained tissue","Breast engorgement",2,"Persistent hemorrhage with good uterine tone suggests trauma, retained tissue or coagulation abnormalities."],
-["Obstetrics","A pregnant patient with severe hypertension reports headache, blurred vision and right upper quadrant pain. What is the priority concern?","Severe preeclampsia with risk of eclampsia and organ injury","Normal pregnancy symptoms","Uncomplicated reflux","Iron deficiency alone",0,"Severe BP elevation with neurological and hepatic symptoms indicates dangerous preeclampsia."],
-["Obstetrics","A postpartum patient develops fever, uterine tenderness and foul-smelling lochia. Which diagnosis is most likely?","Simple engorgement","Normal postpartum recovery","Acute cystitis with certainty","Postpartum endometritis",3,"Fever, uterine tenderness and malodorous lochia suggest uterine infection."],
-
-["Pediatrics","A child with suspected epiglottitis is drooling, stridulous and sitting forward. Which action must be avoided?","Keeping the child calm","Attempting routine throat examination with a tongue depressor","Preparing airway support","Providing oxygen as tolerated",1,"Throat manipulation can precipitate complete airway obstruction in epiglottitis."],
-["Pediatrics","A child with DKA develops headache, bradycardia and deteriorating consciousness during treatment. What should be suspected?","Resolving ketosis","Simple hunger","Cerebral injury or edema","Otitis media",2,"Neurological deterioration during pediatric DKA therapy requires urgent evaluation for cerebral injury."],
-["Pediatrics","An infant with bronchiolitis develops apnea and recurrent desaturation. What is the priority?","Immediate respiratory support and escalation","Routine discharge","Oral feeding during apnea","Delay assessment until fever develops",0,"Apnea and hypoxemia in bronchiolitis are emergency signs of respiratory compromise."],
-["Pediatrics","A child with tetralogy of Fallot develops sudden severe cyanosis while crying. Which position is useful during initial management?","Flat supine with legs extended","Prone with neck flexed","Trendelenburg only","Knee-chest position",3,"Knee-chest positioning can increase systemic vascular resistance and reduce right-to-left shunting during a hypercyanotic spell."],
-["Pediatrics","A child with nephrotic syndrome develops abdominal pain, fever and guarding. Which complication is important to consider?","Uncomplicated constipation only","Spontaneous bacterial peritonitis","Physiological hunger","Iron deficiency alone",1,"Children with nephrotic syndrome are susceptible to serious infections including spontaneous bacterial peritonitis."],
-["Pediatrics","An infant with pyloric stenosis has projectile non-bilious vomiting. Which acid-base disturbance is classically associated?","Respiratory acidosis","Metabolic acidosis with hyperkalemia","Hypochloremic metabolic alkalosis","Respiratory alkalosis",2,"Loss of gastric hydrochloric acid causes hypochloremic metabolic alkalosis."],
-["Pediatrics","A child with Kawasaki disease remains febrile and develops chest pain. Which complication is particularly concerning?","Coronary artery involvement","Appendicitis","Chronic asthma","Otitis externa",0,"Kawasaki disease may cause coronary artery aneurysms and myocardial complications."],
-["Pediatrics","A child with suspected bacterial meningitis has a bulging fontanelle and altered consciousness. Which action is most appropriate?","Delay treatment until all cultures are finalized","Encourage forceful neck flexion","Offer unrestricted oral feeds","Urgently support ABCs and initiate prescribed infection treatment",3,"Meningitis with neurological deterioration requires rapid stabilization and antimicrobial treatment."],
-["Pediatrics","A newborn develops central cyanosis, poor feeding and severe respiratory distress unresponsive to usual oxygen therapy. Which condition should be considered?","Physiological acrocyanosis only","Critical congenital heart disease","Normal transition in every newborn","Mild diaper rash",1,"Persistent central cyanosis may indicate duct-dependent or other critical congenital cardiac disease."],
-["Pediatrics","A child with severe dehydration has lethargy, weak pulses and capillary refill 5 seconds. What is the priority?","Antidiarrheal medication","Routine oral vitamins","Prompt isotonic fluid resuscitation with reassessment","Delay fluids until stool culture",2,"Poor perfusion and lethargy indicate shock requiring rapid circulatory support."],
-
-["Infection Control","A patient with pulmonary tuberculosis requires airborne isolation. Which respiratory protection is appropriate for healthcare workers entering the room?","Fit-tested N95 or equivalent respirator","Surgical cap only","Gloves without a mask","Simple cloth face covering",0,"Airborne TB precautions require appropriate respiratory protection and an airborne isolation environment."],
-["Infection Control","A patient with suspected measles arrives in the emergency department. Which isolation room is preferred?","Positive-pressure protective room","Routine shared ward","Contact isolation only","Airborne infection isolation room",3,"Measles is highly contagious through the airborne route."],
-["Infection Control","A nurse experiences a needlestick injury from a used hollow-bore needle. What is the first response?","Squeeze aggressively and apply bleach","Wash the area promptly and initiate occupational exposure assessment","Wait for symptoms","Conceal the incident",1,"Immediate cleansing and rapid exposure evaluation are necessary; HIV PEP may be time-sensitive."],
-["Infection Control","A patient has symptomatic C. difficile infection. Which precaution is appropriate?","Airborne precautions alone","No environmental cleaning","Contact precautions with soap-and-water hand hygiene when indicated","Shared equipment without disinfection",2,"C. difficile spores require appropriate contact measures and sporicidal environmental cleaning."],
-["Infection Control","A patient with suspected meningococcal meningitis is admitted. Which precaution should be implemented initially?","Droplet precautions","Protective isolation","No additional precautions","Airborne isolation exclusively",0,"Meningococcal disease is spread through respiratory droplets."],
-["Infection Control","A neutropenic patient has temperature 38.6°C and ANC 300/mm3. What is the priority?","Wait for the next shift","Give a live vaccine","Encourage exposure to visitors","Urgent assessment and empiric antimicrobial management per febrile-neutropenia protocol",3,"Febrile neutropenia is a time-critical medical emergency."],
-["Infection Control","A central-line patient develops rigors and hypotension during an infusion. Which action is most appropriate?","Increase the infusion rate","Assess urgently for bloodstream infection or infusion reaction and activate the appropriate response","Ignore if the dressing is clean","Flush the line rapidly without assessment",1,"Rigors and shock during infusion require immediate evaluation for infection and other acute infusion-related complications."],
-["Infection Control","A nurse is caring for a patient with varicella. Which isolation measures are indicated?","Droplet only","Standard only","Airborne and contact precautions","Protective isolation only",2,"Varicella requires airborne and contact precautions until lesions have crusted."],
-
-["Mental Health","A patient taking haloperidol develops high fever, severe rigidity, confusion and autonomic instability. What is suspected?","Neuroleptic malignant syndrome","Panic disorder","Simple akathisia","Tardive dyskinesia alone",0,"Neuroleptic malignant syndrome is a potentially fatal antipsychotic-associated emergency."],
-["Mental Health","A patient states, 'I have saved tablets and will take them tonight.' What is the immediate priority?","Accept a verbal promise and discharge","Leave the patient alone","Promise secrecy","Maintain safety, remove access to means and initiate urgent suicide-risk intervention",3,"A specific suicidal plan with available means indicates immediate danger."],
-["Mental Health","A patient receiving clozapine reports fever and sore throat. Which investigation is particularly important?","Serum calcium only","Absolute neutrophil count","Urine ketones only","Serum lipase only",1,"Clozapine can cause severe neutropenia and agranulocytosis."],
-["Mental Health","A patient in alcohol withdrawal develops confusion, hallucinations, tremor and severe autonomic instability. What is most likely?","Uncomplicated insomnia","Stable schizophrenia","Delirium tremens","Mild social anxiety",2,"Delirium tremens is severe alcohol withdrawal with delirium and autonomic hyperactivity."],
-["Mental Health","A manic patient is intrusive, exhausted and has slept minimally for several days. Which nursing approach is best?","Provide a low-stimulation environment and clear consistent limits","Encourage competitive group activities","Confront every grandiose statement","Offer unrestricted caffeine",0,"Environmental structure, reduced stimulation and rest support safety during acute mania."],
-["Mental Health","A patient with obsessive-compulsive disorder repeatedly washes hands to reduce intrusive contamination fears. Which description is most accurate?","Delusion without anxiety","Negative symptom of schizophrenia","Acute delirium","Compulsion performed to relieve distress associated with obsession",3,"Compulsions are repetitive behaviors intended to reduce anxiety or prevent a feared outcome."],
-
-["Med-Surg","A patient with acute pancreatitis develops hypoxemia, bilateral infiltrates and worsening respiratory distress. Which complication is suspected?","Simple constipation","Acute respiratory distress syndrome","Uncomplicated gastritis","Hypothyroidism",1,"Severe pancreatitis can trigger systemic inflammation and ARDS."],
-["Med-Surg","A patient with cirrhosis develops confusion, sleep reversal and asterixis. Which treatment is commonly prescribed?","High-dose benzodiazepines routinely","Unrestricted sedatives","Lactulose titrated to clinical response","Immediate protein elimination in every patient",2,"Lactulose reduces intestinal ammonia absorption and is used for overt hepatic encephalopathy."],
-["Med-Surg","A patient with bowel obstruction develops constant severe pain, fever, guarding and tachycardia. What is the priority concern?","Strangulation or bowel ischemia","Simple gas accumulation","Normal bowel recovery","Mild dehydration only",0,"Continuous pain with systemic signs suggests ischemia, perforation or peritonitis."],
-["Med-Surg","A patient with upper GI bleeding becomes hypotensive, confused and tachycardic. What is the immediate priority?","Oral iron tablets","Routine discharge education","Encourage ambulation","Airway and circulatory resuscitation with urgent escalation",3,"Major GI hemorrhage threatens perfusion and may also compromise the airway."],
-["Med-Surg","A new postoperative stoma appears dark purple, cool and without bleeding on gentle assessment. What should the nurse suspect?","Normal early stoma appearance","Stoma ischemia requiring urgent surgical assessment","Expected healthy perfusion","Simple skin allergy",1,"A dusky, cool stoma may indicate compromised vascular supply."],
-["Med-Surg","A patient with a long-bone fracture develops respiratory distress, confusion and petechiae 36 hours after injury. Which complication is most likely?","Uncomplicated pneumonia","Stable DVT","Fat embolism syndrome","Acute appendicitis",2,"Respiratory compromise, neurological changes and petechiae after long-bone injury are characteristic of fat embolism syndrome."],
-["Med-Surg","A patient with severe malnutrition develops hypophosphatemia, arrhythmia and weakness after nutritional support begins. What is suspected?","Refeeding syndrome","Simple dehydration","Diabetes insipidus","Iron overload",0,"Insulin-driven intracellular electrolyte shifts after refeeding can cause severe phosphate depletion and organ dysfunction."],
-["Med-Surg","A postoperative patient has sudden severe pain at the surgical site, rapidly increasing swelling and pain with passive stretch. What should be suspected?","Routine postoperative discomfort","Simple muscle soreness","Normal healing","Acute compartment syndrome",3,"Disproportionate pain and pain with passive stretch are early warning signs of compartment syndrome."],
-
-["Community Health","During an outbreak investigation, investigators identify new cases among initially disease-free exposed people over a defined period. Which measure is most appropriate?","Point prevalence","Cumulative incidence or attack rate","Case-fatality rate alone","Crude birth rate",1,"An attack rate is a form of cumulative incidence used to estimate outbreak risk among an exposed population."],
-["Community Health","A screening test has high sensitivity but relatively low specificity. What is the main consequence?","Many false negatives","No false positives","More false-positive screening results","Guaranteed confirmation of disease",2,"Lower specificity increases false positives among people without the disease."],
-["Community Health","Which action best illustrates primary prevention of cervical cancer?","HPV vaccination before exposure","Palliative treatment of advanced cancer","Rehabilitation after hysterectomy","Management of metastatic disease",0,"Vaccination prevents HPV infection and reduces the risk of cervical precancer and cancer."],
-["Community Health","A patient with a positive screening test asks whether disease is confirmed. Which explanation is most accurate?","A positive screening test always confirms disease","Screening results never require follow-up","Specificity has no relevance","Confirmatory diagnostic assessment may still be necessary",3,"Screening tests identify people who may have disease; diagnostic confirmation depends on the condition and test."],
-
-["Safety & Ethics","A nurse discovers that the wrong concentration of insulin may have been administered. What is the immediate priority?","Alter the medication record","Assess the patient and implement immediate safety measures","Wait for symptoms before acting","Conceal the error",1,"Patient assessment and prompt mitigation come before documentation and formal reporting."],
-["Safety & Ethics","A patient refuses a proposed procedure after receiving adequate information and demonstrating decision-making capacity. What is the appropriate response?","Force the procedure","Ask family to override automatically","Respect the informed refusal and document appropriately","Sedate the patient",2,"A capable patient has the right to refuse treatment, even when clinicians disagree."],
-["Safety & Ethics","Which patient should the registered nurse assess first during morning rounds?","A postoperative patient with new stridor and neck swelling","A stable patient requesting discharge papers","A patient asking for an extra blanket","A patient awaiting routine education",0,"New stridor and neck swelling suggest impending airway obstruction and require immediate assessment."],
-["Safety & Ethics","A nurse delegates ambulation of a stable postoperative patient to a trained assistant. Which responsibility remains with the nurse?","No responsibility once delegated","Only signing the attendance register","Only transporting equipment","Assessing suitability, supervising and evaluating the outcome",3,"Delegation transfers performance of a task, not professional accountability for assessment and evaluation."],
-["Safety & Ethics","Two high-alert medications have similar packaging and names. Which system-level strategy best reduces risk?","Rely on memory alone","Separate storage, clear labeling and independent verification when required","Remove labels","Store them together for convenience",1,"System safeguards are more reliable than memory alone for look-alike or sound-alike medication hazards."],
-["Safety & Ethics","A nurse receives an unclear verbal medication order during an emergency. What is the safest response?","Guess the intended dose","Administer the nearest available dose","Use read-back verification and clarify the order","Record a different order",2,"Read-back and clarification reduce errors associated with verbal orders."]
-];
-
-const TOTAL=raw.length;
-const qs=raw.map((r,i)=>({
- id:i+1,
- topic:r[0],
- stem:r[1],
- options:r.slice(2,6),
- correct:r[6],
- rationale:r[7]
-}));
-
+let qs=[], TOTAL=0, attempt=null, deadline=0, pending=Promise.resolve(), submitting=false, started=false;
+const storageKey='nm-test4-attempt:';
+let userId='';
+async function api(body) {
+ const {data,error}=await sb.auth.getSession();
+ if(error || !data.session) throw Object.assign(new Error('login_required'),{status:401});
+ const response=await fetch('/api/mock-test-4',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+data.session.access_token},body:JSON.stringify(body)});
+ const result=await response.json();
+ if(!response.ok) throw Object.assign(new Error(result.code),{status:response.status});
+ return result;
+}
+function showFailure(error){
+ E('exam').style.display='none';E('result').style.display='none';
+ if(error.status===401){location.replace('/login.html?next=%2Fmock-test-4.html');return;}
+ E('accessGate').style.display='grid';
+ gate(error.status===403?'Premium Access Required':'Verification unavailable',error.status===403?'Verified premium access is required for Mock Test 4.':'Your access or answers could not be verified. Please retry. Saved progress is retained.',false);
+ if(error.status!==403){
+  E('gateActions').replaceChildren();
+  const retry=document.createElement('button');retry.className='primary';retry.textContent='Retry';retry.onclick=()=>location.reload();E('gateActions').append(retry);
+ }
+}
+async function checkPremiumAccess(){
+ if(location.protocol==='file:'){
+  gate('Server setup required','This secure premium test cannot run by opening an HTML file directly. Open it through a configured Cloudflare Pages preview with its Functions, Supabase tables and server environment variables. See PHASE-1-2.md for setup.',false);
+  E('gateActions').replaceChildren();
+  return;
+ }
+ if(!sb){showFailure(new Error('SDK unavailable'));return;}
+ try{
+  const {data,error}=await sb.auth.getUser();
+  if(error){if(error.status===401 || error.status===403)throw Object.assign(error,{status:401});throw error;}
+  if(!data.user)throw Object.assign(new Error('login_required'),{status:401});
+  userId=data.user.id;
+  const id=localStorage.getItem(storageKey+userId);
+  let state;
+  try{state=await api(id?{action:'load',id}:{action:'start'});}catch(error){if(error.status!==404)throw error;state=await api({action:'start'});}
+  applyState(state);localStorage.setItem(storageKey+userId,state.id);
+  E('accessGate').style.display='none';
+  if(state.submitted){displayResult(state);return;}
+  E('exam').style.display='grid';startExam();
+ }catch(error){showFailure(error);}
+}
+function applyState(state){
+ attempt=state;qs=state.questions;TOTAL=qs.length;answers=state.answers;marked=state.marked;
+ deadline=performance.now()+Math.max(0,state.expiresAt-state.serverNow);
+}
+function saveProgress(){
+ const snapshot={answers:[...answers],marked:[...marked]};
+ pending=pending.catch(()=>{}).then(async()=>{
+  if(finished)return;
+  try{const state=await api({action:'save',id:attempt.id,revision:attempt.revision,...snapshot});attempt.revision=state.revision;if(state.submitted)displayResult(state);}
+  catch(error){showFailure(error);throw error;}
+ });
+ pending.catch(()=>{});
+}
 let current=0;
-let answers=Array(TOTAL).fill(null);
-let marked=Array(TOTAL).fill(false);
+let answers=[];
+let marked=[];
 let secondsLeft=90*60;
 let finished=false;
 let timer=null;
-const deadline=Date.now()+90*60*1000;
 
 const E=id=>document.getElementById(id);
 
@@ -306,13 +242,14 @@ function render(){
 }
 
 function pick(i){
- if(finished)return;
+ if(finished || submitting)return;
  answers[current]=i;
+ saveProgress();
  render();
 }
 
 function go(i){
- if(finished)return;
+ if(finished || submitting)return;
  if(i<0||i>=TOTAL)return;
  current=i;
  render();
@@ -323,14 +260,16 @@ function next(){go(current+1)}
 function prev(){go(current-1)}
 
 function toggleMark(){
- if(finished)return;
+ if(finished || submitting)return;
  marked[current]=!marked[current];
+ saveProgress();
  render();
 }
 
 function clearAnswer(){
- if(finished)return;
+ if(finished || submitting)return;
  answers[current]=null;
+ saveProgress();
  render();
 }
 
@@ -346,8 +285,8 @@ function updateTimer(){
  }
 }
 
-function submitTest(auto){
- if(finished)return;
+async function submitTest(auto){
+ if(finished || submitting)return;
 
  const unanswered=answers.filter(x=>x===null).length;
 
@@ -361,13 +300,17 @@ function submitTest(auto){
   if(!confirm(message))return;
  }
 
- finished=true;
- clearInterval(timer);
-
- const correct=qs.reduce(
-  (sum,q,i)=>sum+(answers[i]===q.correct?1:0),0
- );
-
+ submitting=true;
+ try{
+  await pending;
+  if(finished)return;
+  const state=await api({action:'submit',id:attempt.id,revision:attempt.revision,answers,marked});
+  displayResult(state,auto);
+ }catch(error){showFailure(error);}finally{submitting=false;}
+}
+function displayResult(state,auto=false){
+ applyState(state);finished=true;clearInterval(timer);E('accessGate').style.display='none';
+ const correct=state.result.correct, unanswered=state.result.unanswered;
  const incorrect=TOTAL-correct-unanswered;
 
  E("exam").style.display="none";
@@ -449,21 +392,22 @@ function submitTest(auto){
 }
 
 function startExam(){
+started=true;secondsLeft=Math.max(0,Math.ceil((deadline-performance.now())/1000));
 updateTimer();
 render();
 
 timer=setInterval(()=>{
- if(finished)return;
- secondsLeft=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+ if(finished || submitting)return;
+ secondsLeft=Math.max(0,Math.ceil((deadline-performance.now())/1000));
  updateTimer();
  if(secondsLeft===0)submitTest(true);
 },1000);
 }
 
-startExam();
+checkPremiumAccess();
 
 window.addEventListener("beforeunload",event=>{
- if(!finished){
+ if(started && !finished){
   event.preventDefault();
   event.returnValue="";
  }

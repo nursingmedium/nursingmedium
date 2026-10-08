@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PGIMER Mock Test 5 | Nursing Medium</title>
+<title>PGIMER Advanced Mock Test 5 | Nursing Medium</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#f3f6fb;font-family:Arial,sans-serif;color:#111827}
@@ -13,7 +13,7 @@ header{background:#095CF8;color:white;padding:17px 22px;position:sticky;top:0;z-
 .brand{font-size:17px;font-weight:800}
 .sub{font-size:12px;color:#dbeafe;margin-top:5px}
 .timer{font-size:24px;font-weight:800;background:#174FC6;color:white;padding:10px 15px;border-radius:10px;white-space:nowrap}
-main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;padding:0 14px}
+main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;padding:0 14px}
 .card{background:white;border:1px solid #dbe3ef;border-radius:16px;padding:22px;box-shadow:0 5px 18px #0000000a}
 .badge{display:inline-block;background:#eaf2ff;color:#095CF8;padding:6px 11px;border-radius:99px;font-size:12px;font-weight:800}
 .qnum{color:#64748b;font-size:13px;font-weight:700;margin:15px 0}
@@ -56,13 +56,14 @@ main{grid-template-columns:1fr}
 <div class="top">
 <div>
 <div class="brand">Nursing Medium — PGIMER Nursing Officer</div>
-<div class="sub">Mock Test 5 • 100 Nursing MCQs • Local Preview • 90 Minutes</div>
+<div class="sub">Mock Test 5 • 100 Nursing MCQs • 90 Minutes</div>
 </div>
 <div class="timer" id="timer">90:00</div>
 </div>
 </header>
 
-<main id="exam">
+<div id="accessGate" style="min-height:55vh;display:grid;place-items:center;padding:24px"><div class="card" style="max-width:520px;text-align:center"><h2 id="gateTitle">Verifying Premium Access…</h2><p id="gateMessage" role="status" aria-live="polite">Checking your login and verified purchase.</p><div id="gateActions"></div></div></div>
+<main id="exam" style="display:none">
 <section class="card">
 <span class="badge" id="topic"></span>
 <div class="qnum" id="qnum"></div>
@@ -94,1031 +95,88 @@ main{grid-template-columns:1fr}
 <div id="topics"></div>
 <h3>Complete Answer Review</h3>
 <div id="reviews"></div>
-<button class="primary" onclick="location.reload()">Restart Test</button>
+<button class="primary" onclick="localStorage.removeItem(storageKey+userId);location.reload()">Restart Test</button>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
-const raw = [
-  [
-    "Vital Signs",
-    "An adult has a blood pressure of 136/84 mmHg. What is the pulse pressure?",
-    "84 mmHg",
-    "110 mmHg",
-    "52 mmHg",
-    "220 mmHg",
-    2,
-    "Pulse pressure is systolic minus diastolic pressure: 136 - 84 = 52 mmHg."
-  ],
-  [
-    "Vital Signs",
-    "A nurse measures an adult's blood pressure with a cuff that is too small. Which error is most likely?",
-    "A falsely low reading",
-    "An accurate reading in every case",
-    "An absent diastolic pressure only",
-    "A falsely high reading",
-    3,
-    "An undersized cuff requires excessive pressure to compress the artery and can overestimate blood pressure."
-  ],
-  [
-    "Vital Signs",
-    "A patient with metabolic acidosis develops sustained deep, rapid breathing. Which pattern is this?",
-    "Cheyne-Stokes breathing",
-    "Apnea",
-    "Kussmaul breathing",
-    "Normal eupnea",
-    2,
-    "Kussmaul breathing is a deep ventilatory response that helps eliminate carbon dioxide during metabolic acidosis."
-  ],
-  [
-    "Vital Signs",
-    "Breathing gradually becomes deeper, then shallower, followed by apnea in repeated cycles. Which pattern is described?",
-    "Continuous tachypnea",
-    "Normal eupnea",
-    "Isolated sighing",
-    "Cheyne-Stokes breathing",
-    3,
-    "Cheyne-Stokes breathing has a cyclic crescendo-decrescendo pattern with periods of apnea."
-  ],
-  [
-    "Vital Signs",
-    "A patient's radial pulse is irregular. What assessment best establishes the heart rate?",
-    "Count the apical pulse for a full minute",
-    "Count the radial pulse for five seconds",
-    "Estimate the rate from skin temperature",
-    "Use the respiratory rate as the pulse rate",
-    0,
-    "A full-minute apical count improves accuracy when the peripheral rhythm is irregular."
-  ],
-  [
-    "Vital Signs",
-    "Before repeating an unexpectedly high blood-pressure reading in a stable patient, what should the nurse do?",
-    "Check cuff size and positioning and allow quiet rest",
-    "Place the cuff over a thick sleeve",
-    "Ask the patient to talk throughout measurement",
-    "Hold the arm well below heart level",
-    0,
-    "Correct technique and quiet rest reduce avoidable measurement error before clinical interpretation."
-  ],
-  [
-    "Vital Signs",
-    "Which measurement represents the difference between apical and peripheral pulse rates?",
-    "Pulse deficit",
-    "Pulse pressure",
-    "Mean arterial pressure",
-    "Respiratory volume",
-    0,
-    "A pulse deficit occurs when some cardiac contractions do not produce a palpable peripheral pulse."
-  ],
-  [
-    "Vital Signs",
-    "An adult who normally breathes 16 times/min now breathes 8 times/min after an opioid. Which finding needs priority attention?",
-    "Reduced ventilation",
-    "Improved aerobic fitness",
-    "Increased bowel motility",
-    "Normal response requiring no assessment",
-    0,
-    "A low respiratory rate after an opioid may signal respiratory depression and requires prompt assessment."
-  ],
-  [
-    "Vital Signs",
-    "Which artery is normally palpated at the wrist when measuring a peripheral pulse?",
-    "Radial artery",
-    "Femoral artery",
-    "Carotid artery",
-    "Popliteal artery",
-    0,
-    "The radial artery is accessible on the thumb side of the wrist."
-  ],
-  [
-    "Vital Signs",
-    "A patient has a low oxygen-saturation reading while shivering, with cold fingers. What is the best interpretation?",
-    "Poor peripheral signal may affect the reading; assess the patient and verify the measurement",
-    "The reading always proves respiratory failure",
-    "Shivering makes pulse oximetry perfectly accurate",
-    "Ignore the reading without assessing the patient",
-    0,
-    "Motion and low peripheral perfusion can impair pulse-oximeter signal quality; clinical assessment remains essential."
-  ],
-  [
-    "Infection Control",
-    "For which patients should Standard Precautions be used?",
-    "Only patients with a positive culture",
-    "Only patients in intensive care",
-    "All patients, regardless of known infection status",
-    "Only patients with fever",
-    2,
-    "Standard Precautions apply to all care; additional precautions depend on the suspected or confirmed infection."
-  ],
-  [
-    "Infection Control",
-    "After removing gloves used for wound care, what should the nurse do?",
-    "Put on a new pair without cleaning the hands",
-    "Wipe only the fingertips on the uniform",
-    "Perform hand hygiene",
-    "Wait until the end of the shift",
-    2,
-    "Gloves do not replace hand hygiene; hands can be contaminated during glove use or removal."
-  ],
-  [
-    "Infection Control",
-    "A dressing change is likely to splash blood toward the nurse's face. Which protection is appropriate?",
-    "Gloves alone",
-    "A shoe cover alone",
-    "An identification badge over the mouth",
-    "Mask with eye protection or a face shield, with other indicated PPE",
-    3,
-    "PPE should match the anticipated exposure; facial splash risk requires protection of the eyes, nose and mouth."
-  ],
-  [
-    "Infection Control",
-    "A nurse finishes using a disposable injection needle. Which disposal method is safest?",
-    "Recap it with both hands",
-    "Leave it on the bedside table",
-    "Place it promptly in a sharps container without routine recapping",
-    "Break the needle by hand",
-    2,
-    "Immediate safe disposal reduces needlestick risk; routine two-handed recapping should be avoided."
-  ],
-  [
-    "Infection Control",
-    "What term describes the interval between infection and the appearance of symptoms?",
-    "Convalescence",
-    "Recovery phase",
-    "Incubation period",
-    "Established illness phase",
-    2,
-    "The incubation period precedes clinical symptoms after infection occurs."
-  ],
-  [
-    "Infection Control",
-    "A patient is recovering and symptoms are resolving after an infection. Which stage is described?",
-    "Convalescence",
-    "Incubation",
-    "Initial exposure",
-    "Prodromal onset",
-    0,
-    "Convalescence is the recovery phase after the acute illness."
-  ],
-  [
-    "Infection Control",
-    "A nurse touches a phone with sterile gloves during a sterile dressing procedure. What should happen next?",
-    "Continue because the phone looks clean",
-    "Clean the gloves with tap water",
-    "Replace the contaminated gloves before continuing sterile work",
-    "Consider all objects in the room sterile",
-    2,
-    "A nonsterile surface contaminates sterile gloves; the sterile technique must be re-established."
-  ],
-  [
-    "Infection Control",
-    "Which action most directly interrupts transmission through contaminated hands?",
-    "Hand hygiene at the indicated moments of care",
-    "Increasing room lighting",
-    "Reducing drinking water",
-    "Using the same gloves between patients",
-    0,
-    "Hand hygiene interrupts transfer of organisms between patients, staff and surfaces."
-  ],
-  [
-    "Infection Control",
-    "A multidose vial will be accessed for a patient. Which practice is required for each entry?",
-    "Use a new sterile needle and syringe",
-    "Reuse the syringe if the needle is changed",
-    "Reuse the needle if the syringe is changed",
-    "Use a syringe previously used on another patient",
-    0,
-    "Safe injection practice requires a new sterile needle and syringe for each access and patient procedure."
-  ],
-  [
-    "Infection Control",
-    "A nurse sees a colleague moving between two patients without changing contaminated gloves. What is the best response?",
-    "Accept it because both patients are on the same ward",
-    "Stop the unsafe practice and prompt glove removal and hand hygiene",
-    "Ask the colleague to wear another pair over the first",
-    "Wait until both patients become infected",
-    1,
-    "Contaminated gloves can transfer organisms; safe practice requires glove changes and appropriate hand hygiene."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A nurse cleans a patient's eyes. Which direction is appropriate?",
-    "From the outer canthus toward the inner canthus",
-    "In a circular motion over the cornea",
-    "From the inner canthus toward the outer canthus",
-    "From the cheek directly onto the cornea",
-    2,
-    "Cleaning from inner to outer canthus helps avoid moving debris toward the lacrimal drainage area."
-  ],
-  [
-    "Comfort and Hygiene",
-    "What is the main reason to use a separate clean swab for each eye?",
-    "To make the procedure painful",
-    "To increase intraocular pressure",
-    "To reduce cross-contamination",
-    "To remove the need for hand hygiene",
-    2,
-    "Separate swabs help avoid transferring secretions or organisms between eyes."
-  ],
-  [
-    "Comfort and Hygiene",
-    "An unconscious patient cannot close the eyelids completely. Which complication should the nurse help prevent?",
-    "Corneal drying and exposure injury",
-    "Improved tear production",
-    "Cataract reversal",
-    "Increased visual acuity",
-    0,
-    "Incomplete eyelid closure exposes the cornea to drying; eye protection and prescribed lubrication may be needed."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A patient with neuropathy asks to soak the feet in very hot water. What is the safest response?",
-    "Encourage prolonged soaking",
-    "Avoid hot soaking and inspect the skin carefully",
-    "Test the water only with the patient's numb foot",
-    "Add a heating pad beneath the feet",
-    1,
-    "Reduced sensation increases burn risk, and prolonged soaking can damage skin."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A patient has pain and swelling in one calf and suspected deep-vein thrombosis. Which action should be avoided?",
-    "Reporting the symptoms",
-    "Assessing the patient",
-    "Massaging the affected calf",
-    "Following prescribed investigation orders",
-    2,
-    "Massage should be avoided when DVT is suspected; prompt evaluation is needed."
-  ],
-  [
-    "Comfort and Hygiene",
-    "Before irrigating an ear, which finding should make the nurse withhold irrigation and seek review?",
-    "The patient can hear speech",
-    "A known perforated tympanic membrane",
-    "A normal temperature",
-    "Wax visible at the outer canal",
-    1,
-    "A perforated tympanic membrane makes routine ear irrigation unsafe because fluid can enter the middle ear."
-  ],
-  [
-    "Comfort and Hygiene",
-    "Why should ear-irrigation fluid be near body temperature when irrigation is appropriate?",
-    "To sterilize the ear by heat",
-    "To dissolve the tympanic membrane",
-    "To create pain as a treatment effect",
-    "To reduce dizziness from vestibular stimulation",
-    3,
-    "Fluid that is too cold or hot can stimulate the vestibular apparatus and cause dizziness."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A bedbound patient cannot wash independently. Which plan best supports dignity during bathing?",
-    "Leave the patient fully uncovered throughout",
-    "Explain the care, maintain privacy and expose only the area being washed",
-    "Discuss personal details with visitors",
-    "Skip consent because the patient is dependent",
-    1,
-    "Explanation, privacy and limited exposure protect dignity while delivering hygiene care."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A patient reports that soft music helps reduce anxiety before a procedure. How should the nurse use it?",
-    "Replace the prescribed treatment entirely",
-    "Promise that it cures all disease",
-    "Offer it as an adjunct to appropriate clinical care",
-    "Require all other patients to listen",
-    2,
-    "Music may support comfort and anxiety management alongside necessary clinical treatment."
-  ],
-  [
-    "Comfort and Hygiene",
-    "A patient uses an herbal product in addition to prescribed medicines. What is the best nursing action?",
-    "Assume all herbal products are risk-free",
-    "Tell the patient to conceal it from the prescriber",
-    "Double every prescription dose",
-    "Document the product and arrange review for interactions",
-    3,
-    "Herbal products may interact with medicines; accurate medication history supports safe review."
-  ],
-  [
-    "Skin and Mobility",
-    "An immobile patient has intact sacral skin with persistent nonblanching redness. Which stage is most consistent with this finding?",
-    "Stage 2 pressure injury",
-    "Stage 3 pressure injury",
-    "Stage 4 pressure injury",
-    "Stage 1 pressure injury",
-    3,
-    "Stage 1 involves nonblanchable erythema of intact skin; deeper stages involve skin or tissue loss."
-  ],
-  [
-    "Skin and Mobility",
-    "Which plan best reduces pressure-injury risk for a patient unable to reposition independently?",
-    "Massage persistently red bony prominences",
-    "Individualized repositioning, skin assessment and an appropriate support surface",
-    "Leave the patient in one position all day",
-    "Use a support surface instead of all skin assessments",
-    1,
-    "Pressure relief and individualized prevention measures work together; a support surface does not remove the need for assessment."
-  ],
-  [
-    "Skin and Mobility",
-    "A patient's heels remain pressed against the mattress despite a pressure-redistributing surface. What additional measure is appropriate?",
-    "Offload the heels using an appropriate device or support",
-    "Place a tight bandage around both ankles",
-    "Massage the heels forcefully every hour",
-    "Ignore the heels because the mattress is specialized",
-    0,
-    "Heel offloading reduces localized pressure and should be incorporated into the prevention plan."
-  ],
-  [
-    "Skin and Mobility",
-    "A stable patient feels dizzy on standing for the first postoperative walk. What should the nurse do immediately?",
-    "Continue walking quickly",
-    "Leave the patient standing alone",
-    "Support the patient and help them sit safely while assessing",
-    "Tell the patient to ignore the dizziness",
-    2,
-    "Immediate support prevents a fall while possible orthostatic intolerance is assessed."
-  ],
-  [
-    "Skin and Mobility",
-    "When moving a dependent patient up the bed, which method best protects the patient and staff?",
-    "Use appropriate assistance and a friction-reducing device",
-    "Drag the patient by the arms",
-    "Pull the patient by the neck",
-    "Work alone despite needing assistance",
-    0,
-    "Safe handling equipment and adequate help reduce injury and skin shear."
-  ],
-  [
-    "Skin and Mobility",
-    "A patient has right-sided weakness and is learning to use a cane. In which hand is the cane usually held?",
-    "The right hand",
-    "The left hand",
-    "Both hands behind the back",
-    "Whichever hand prevents any assessment",
-    1,
-    "A cane is generally held on the stronger side to support the weaker limb during walking."
-  ],
-  [
-    "Skin and Mobility",
-    "Which is a major pressure-injury risk factor?",
-    "Inability to change position independently",
-    "Regular independent walking",
-    "Intact mobility with adequate nutrition",
-    "A brief conversation with staff",
-    0,
-    "Limited mobility allows prolonged pressure over vulnerable tissues."
-  ],
-  [
-    "Skin and Mobility",
-    "A nurse finds a wet sheet beneath an incontinent patient. What is the best response?",
-    "Cleanse gently, dry the skin and replace the wet material promptly",
-    "Leave it until the next shift",
-    "Rub the skin vigorously with a dry towel",
-    "Use harsh soap repeatedly",
-    0,
-    "Moisture and friction damage skin; prompt gentle care and dryness support skin protection."
-  ],
-  [
-    "Skin and Mobility",
-    "Which finding most clearly suggests a fall-prevention plan needs adjustment?",
-    "The patient repeatedly attempts to walk despite new dizziness",
-    "The bed is locked in a low position",
-    "The call bell is within reach",
-    "The pathway is clear",
-    0,
-    "New symptoms and unsafe attempts at mobility require reassessment of assistance and prevention measures."
-  ],
-  [
-    "Skin and Mobility",
-    "Which body-mechanics practice is appropriate when lifting an object?",
-    "Hold the object at arm's length",
-    "Twist while lifting from the floor",
-    "Keep the object close and avoid twisting the trunk",
-    "Keep the knees locked and bend only the waist",
-    2,
-    "Keeping a load close and avoiding twisting reduce strain; heavier patient moves require equipment and assistance."
-  ],
-  [
-    "Oxygen and Airway",
-    "Which oxygen device is designed to deliver a controlled oxygen concentration using an air-entrainment system?",
-    "Venturi mask",
-    "A loosely applied simple mask",
-    "A room-air face shield",
-    "An unconnected nasal cannula",
-    0,
-    "A Venturi system entrains air at a defined ratio; the selected adapter and specified flow determine delivery."
-  ],
-  [
-    "Oxygen and Airway",
-    "A Venturi mask is in use. Which nursing action is important?",
-    "Cover the entrainment ports with bedding",
-    "Use any flow rate regardless of the adapter",
-    "Remove oxygen tubing while leaving the mask on",
-    "Keep the air-entrainment ports unobstructed and use the adapter's specified flow",
-    3,
-    "Obstructed ports or an incorrect flow can interfere with the intended oxygen delivery."
-  ],
-  [
-    "Oxygen and Airway",
-    "An alert breathless patient is more comfortable upright. Which position often helps ventilation?",
-    "Flat supine with no pillow in every case",
-    "Head-down Trendelenburg routinely",
-    "Prone with the face buried in bedding",
-    "High Fowler's position when tolerated",
-    3,
-    "Upright positioning can improve chest expansion and ease breathing when clinically appropriate."
-  ],
-  [
-    "Oxygen and Airway",
-    "A patient suddenly coughs and becomes breathless during nasogastric-tube insertion. What should the nurse do?",
-    "Advance the tube faster",
-    "Begin feeding immediately",
-    "Assume coughing proves gastric placement",
-    "Stop advancing the tube and assess airway safety",
-    3,
-    "Respiratory distress may indicate airway entry; advancement must stop while the patient is assessed."
-  ],
-  [
-    "Oxygen and Airway",
-    "Why is blind finger sweeping avoided in suspected airway obstruction?",
-    "It always removes every obstruction",
-    "It may push an unseen object deeper or injure the airway",
-    "It is the only safe action for a conscious adult",
-    "It confirms tube placement",
-    1,
-    "Remove an object only if visible and accessible; blind sweeping can worsen obstruction."
-  ],
-  [
-    "Oxygen and Airway",
-    "An adult choking on food can cough forcefully and speak. What is the best initial action?",
-    "Give water immediately",
-    "Perform a blind finger sweep",
-    "Encourage coughing and monitor for deterioration",
-    "Start chest compressions while the patient remains responsive and breathing",
-    2,
-    "An effective cough indicates some airflow; encourage coughing and escalate if obstruction becomes severe."
-  ],
-  [
-    "Oxygen and Airway",
-    "A patient with a tracheostomy needs suctioning. What should determine whether suction is needed?",
-    "Clinical signs of retained secretions and respiratory assessment",
-    "A rigid schedule regardless of assessment",
-    "The nurse's meal break",
-    "The color of the bedsheet",
-    0,
-    "Suctioning is guided by patient assessment, including secretions, breath sounds and ventilation."
-  ],
-  [
-    "Oxygen and Airway",
-    "During airway suctioning, oxygen saturation falls and the patient becomes bradycardic. What is the priority?",
-    "Increase suction duration",
-    "Stop suctioning and restore oxygenation while assessing",
-    "Ignore the monitor until the procedure ends",
-    "Apply continuous suction for several minutes",
-    1,
-    "Hypoxemia and vagal stimulation can occur during suction; stop and stabilize the patient."
-  ],
-  [
-    "Oxygen and Airway",
-    "Which instruction is appropriate for incentive spirometry?",
-    "Inhale slowly and deeply through the device as instructed",
-    "Blow out rapidly into the device",
-    "Use it only while asleep",
-    "Take only shallow breaths",
-    0,
-    "Incentive spirometry encourages a sustained deep inspiration; correct instruction improves technique."
-  ],
-  [
-    "Oxygen and Airway",
-    "Which safety advice is essential for a patient receiving oxygen?",
-    "Use candles near the mask",
-    "Store oxygen beside an active flame",
-    "Use smoking as a breathing exercise",
-    "Keep smoking and open flames away from oxygen equipment",
-    3,
-    "Oxygen supports combustion and greatly increases fire risk around ignition sources."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A laboratory report shows sodium 128 mmol/L. Which term describes this result?",
-    "Hypernatremia",
-    "Hyperkalemia",
-    "Hypercalcemia",
-    "Hyponatremia",
-    3,
-    "Serum sodium below 135 mmol/L is generally classified as hyponatremia."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A laboratory report shows sodium 151 mmol/L. Which term describes this result?",
-    "Hyponatremia",
-    "Hypokalemia",
-    "Hypomagnesemia",
-    "Hypernatremia",
-    3,
-    "Serum sodium above 145 mmol/L is generally classified as hypernatremia."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A patient taking a loop diuretic has potassium 2.9 mmol/L. Which complication is a priority concern?",
-    "Improved muscle strength",
-    "Guaranteed absence of symptoms",
-    "Cardiac dysrhythmia",
-    "Increased bone growth",
-    2,
-    "Low potassium can disturb cardiac conduction and requires prompt assessment and prescribed correction."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "Which ECG change is classically associated with hyperkalemia?",
-    "Tall peaked T waves",
-    "Prominent U waves alone",
-    "A normal ECG in every case",
-    "A shortened QRS in every severe case",
-    0,
-    "Hyperkalemia may cause peaked T waves and, with progression, conduction abnormalities; ECG findings vary."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A patient with kidney failure asks why potassium levels need close monitoring. Which explanation is best?",
-    "Reduced renal excretion can allow potassium accumulation",
-    "The kidneys have no role in potassium balance",
-    "Potassium is eliminated only by the lungs",
-    "Kidney failure always causes low potassium",
-    0,
-    "Impaired renal function can reduce potassium excretion and increase hyperkalemia risk."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A patient with SIADH develops dilutional hyponatremia. Which mechanism explains it?",
-    "Complete absence of water retention",
-    "Excess loss of all body water",
-    "Excess water retention relative to sodium",
-    "Increased sodium from saline in every case",
-    2,
-    "Excess ADH promotes water retention, which can dilute serum sodium and lower plasma osmolality."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A patient with severe hyponatremia suddenly develops a seizure. What is the immediate nursing priority?",
-    "Offer a large glass of water",
-    "Delay assessment until the next routine blood test",
-    "Protect the airway and activate emergency clinical assistance",
-    "Encourage independent walking",
-    2,
-    "Seizures indicate severe neurological involvement and require immediate stabilization and urgent treatment."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "A dehydrated adult reports intense thirst and has dry mucosa with reduced urine output. Which assessment is most useful for fluid balance?",
-    "Record hair color only",
-    "Ignore urine output",
-    "Trend intake, output, weight and clinical signs",
-    "Measure height every hour",
-    2,
-    "Fluid assessment combines clinical findings with intake/output and weight trends."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "Which medicine requires particular attention to hyperkalemia risk?",
-    "A potassium-wasting diuretic as the only risk factor",
-    "A topical emollient",
-    "An artificial tear",
-    "Spironolactone",
-    3,
-    "Spironolactone is potassium-sparing; risk increases with renal impairment and other potassium-raising factors."
-  ],
-  [
-    "Fluids and Electrolytes",
-    "Which instruction is safest for a prescribed intravenous potassium infusion?",
-    "Use appropriate dilution and a controlled infusion; never give IV push",
-    "Give undiluted potassium as a rapid bolus",
-    "Allow the patient to adjust the rate",
-    "Inject it directly without checking the prescription",
-    0,
-    "IV potassium is a high-alert medicine; rapid concentrated administration can cause fatal dysrhythmias."
-  ],
-  [
-    "Nutrition and Feeding",
-    "Before first use of a newly inserted nasogastric feeding tube, what is required?",
-    "Confirm placement using an approved method before giving feed or medicines",
-    "Rely only on the absence of coughing",
-    "Rely only on whooshing heard over the abdomen",
-    "Start feeding before confirmation",
-    0,
-    "Placement must be confirmed by an approved protocol; auscultation of an air bolus does not reliably prove gastric placement."
-  ],
-  [
-    "Nutrition and Feeding",
-    "Which patient position reduces aspiration risk during gastric tube feeding when not contraindicated?",
-    "Flat supine throughout",
-    "Head of bed elevated at least 30 degrees",
-    "Head lower than the feet",
-    "Face down with the nose obstructed",
-    1,
-    "Head elevation helps reduce reflux and aspiration risk during feeding."
-  ],
-  [
-    "Nutrition and Feeding",
-    "During tube feeding a patient suddenly coughs, becomes breathless and desaturates. What should the nurse do first?",
-    "Increase the feeding rate",
-    "Give the next medicine through the tube",
-    "Continue until the container is empty",
-    "Stop the feed and assess the airway and breathing",
-    3,
-    "Possible aspiration requires stopping feeding and prompt respiratory assessment."
-  ],
-  [
-    "Nutrition and Feeding",
-    "An enteral tube repeatedly blocks after medicines. Which practice should be reviewed?",
-    "Mixing all medicines with the entire feed bag",
-    "Crushing every modified-release tablet",
-    "Skipping all water flushes",
-    "Appropriate flushing before, between and after compatible medicines",
-    3,
-    "Appropriate flushing and separate compatible medicine administration help maintain tube patency."
-  ],
-  [
-    "Nutrition and Feeding",
-    "Which oral formulation should generally not be crushed for tube administration?",
-    "A suitable immediate-release tablet approved for crushing",
-    "A prescribed compatible liquid",
-    "A modified-release tablet",
-    "An approved soluble preparation",
-    2,
-    "Crushing modified-release products can disrupt dose release; use a pharmacist-approved alternative."
-  ],
-  [
-    "Nutrition and Feeding",
-    "Which finding makes starting a nasogastric tube without specialist review particularly unsafe?",
-    "A normal bowel sound",
-    "A patient who wears spectacles",
-    "Suspected basal skull fracture",
-    "An intact nasal septum with no injury",
-    2,
-    "Facial or skull-base injury can make nasal insertion dangerous; an alternative route may be needed."
-  ],
-  [
-    "Nutrition and Feeding",
-    "A patient has a functioning digestive tract but cannot swallow safely. Which route may provide nutrition after assessment?",
-    "Intramuscular food injection",
-    "Withholding all nutrition indefinitely",
-    "Parenteral nutrition in every case regardless of gut function",
-    "Enteral feeding",
-    3,
-    "Enteral nutrition uses the functioning gastrointestinal tract when oral intake is unsafe or inadequate."
-  ],
-  [
-    "Nutrition and Feeding",
-    "Which tube is commonly used for gastric decompression and has an air-vent lumen?",
-    "Urinary Foley catheter",
-    "Chest drain",
-    "Peripheral IV cannula",
-    "Salem sump tube",
-    3,
-    "A Salem sump is a double-lumen gastric tube with a suction lumen and an air vent."
-  ],
-  [
-    "Nutrition and Feeding",
-    "A patient develops diarrhea while receiving enteral nutrition. What is the best nursing response?",
-    "Stop all nutrition permanently without assessment",
-    "Assess feeding delivery, medicines, infection risk and hydration",
-    "Assume the formula is the only possible cause",
-    "Ignore fluid losses",
-    1,
-    "Diarrhea has multiple possible causes; assessment guides appropriate intervention and prevention of dehydration."
-  ],
-  [
-    "Nutrition and Feeding",
-    "A patient receiving enteral nutrition is prescribed several medicines. What is the safest preparation step?",
-    "Assume every tablet is crushable",
-    "Add all tablets intact to the formula",
-    "Ignore the tube's route and diameter",
-    "Check each medicine's suitability for the tube route with the pharmacist or approved guidance",
-    3,
-    "Formulation, tube type and site affect medicine administration; suitability must be checked."
-  ],
-  [
-    "Elimination and Procedures",
-    "A catheterized patient needs a small fresh urine sample for culture. Where should it be obtained?",
-    "From the disinfected sampling port using sterile technique",
-    "From the drainage bag's pooled urine",
-    "From the floor beneath the bag",
-    "From a used bedpan",
-    0,
-    "A fresh specimen is collected aseptically from the sampling port; pooled bag urine is unsuitable for routine culture."
-  ],
-  [
-    "Elimination and Procedures",
-    "Where should a urinary drainage bag normally be positioned?",
-    "Above the bladder",
-    "On the floor",
-    "At the same height as the patient's head",
-    "Below bladder level, off the floor, without obstructing flow",
-    3,
-    "Gravity drainage and correct positioning reduce backflow and contamination risks."
-  ],
-  [
-    "Elimination and Procedures",
-    "Which action helps prevent catheter-associated urinary infection?",
-    "Keep every catheter indefinitely",
-    "Disconnect the system repeatedly",
-    "Use a catheter for every continent patient",
-    "Review the indication and remove the catheter when no longer necessary",
-    3,
-    "Limiting catheter use and duration is a key prevention strategy."
-  ],
-  [
-    "Elimination and Procedures",
-    "An indwelling urinary catheter stops draining and the patient has suprapubic discomfort. What should the nurse check first?",
-    "Remove the catheter without assessment in every case",
-    "Tubing kinks, bag position and drainage obstruction while assessing",
-    "Clamp the tube for the rest of the shift",
-    "Give a large fluid bolus without a prescription",
-    1,
-    "Mechanical obstruction can stop drainage; prompt assessment includes the patient and the drainage system."
-  ],
-  [
-    "Elimination and Procedures",
-    "Which stoma appearance is generally consistent with healthy perfusion?",
-    "Dry black tissue",
-    "Moist pink or red tissue",
-    "Pale gray tissue",
-    "Cold dark-purple tissue",
-    1,
-    "A well-perfused stoma is typically moist and pink to red; dark or pale changes require review."
-  ],
-  [
-    "Elimination and Procedures",
-    "Compared with a sigmoid colostomy, an ascending colostomy usually produces what output?",
-    "Uniformly hard formed stool",
-    "More liquid output",
-    "No output under any circumstances",
-    "Only urine",
-    1,
-    "Less water has been absorbed from proximal colonic contents, so output tends to be more liquid."
-  ],
-  [
-    "Elimination and Procedures",
-    "Which position is commonly used for administering an enema to an adult when appropriate?",
-    "Left lateral or left Sims' position",
-    "Standing on one leg",
-    "Prone with the face obstructed",
-    "Head-down position in every patient",
-    0,
-    "Left lateral positioning follows the anatomy of the distal colon and facilitates administration."
-  ],
-  [
-    "Elimination and Procedures",
-    "A patient develops severe abdominal pain while an enema is being administered. What is the best response?",
-    "Increase the pressure immediately",
-    "Stop administration and assess before proceeding",
-    "Tell the patient severe pain is mandatory",
-    "Complete the full volume regardless",
-    1,
-    "Severe pain warrants stopping and reassessment; forcing administration can cause injury."
-  ],
-  [
-    "Elimination and Procedures",
-    "Why is a lumbar puncture commonly performed below the level of the spinal cord termination?",
-    "To puncture the brainstem",
-    "To reduce the risk of direct spinal cord injury",
-    "To sample arterial blood",
-    "To increase intracranial pressure",
-    1,
-    "Lower lumbar interspaces provide access to CSF below the usual adult cord termination."
-  ],
-  [
-    "Elimination and Procedures",
-    "A patient's IV site is painful, warm and erythematous along the vein. Which complication is most likely?",
-    "Normal healing in every case",
-    "A healthy functioning site",
-    "Improved venous circulation",
-    "Phlebitis",
-    3,
-    "Inflammation along the vein suggests phlebitis and requires stopping use and assessment according to protocol."
-  ],
-  [
-    "Medication Safety",
-    "Before administering a medicine, which identification method is appropriate?",
-    "Use the bed number alone",
-    "Ask another patient to identify them",
-    "Recognize the patient's clothing only",
-    "Match two approved identifiers with the medication record",
-    3,
-    "Two approved identifiers reduce wrong-patient errors; room or bed number is not a patient identifier."
-  ],
-  [
-    "Medication Safety",
-    "A medicine order has an unclear dose. What should the nurse do?",
-    "Choose the most familiar dose",
-    "Clarify the order before administration",
-    "Give half of an unknown dose",
-    "Ask a visitor to guess",
-    1,
-    "An unclear medication order must be clarified rather than interpreted by guesswork."
-  ],
-  [
-    "Medication Safety",
-    "A prescription states STAT. What does this mean?",
-    "Administer only at bedtime",
-    "Administer only after a week",
-    "Administer immediately as clinically indicated",
-    "Administer whenever the patient chooses",
-    2,
-    "STAT indicates an immediate dose; required safety checks still apply."
-  ],
-  [
-    "Medication Safety",
-    "A prescription states PRN. What must guide administration?",
-    "A fixed requirement to administer every hour",
-    "The specified indication and permitted dose interval",
-    "A decision without any order",
-    "The nurse's personal preference alone",
-    1,
-    "PRN medicines are given when the ordered indication is present and within prescribed limits."
-  ],
-  [
-    "Medication Safety",
-    "A medicine triggers hives and wheezing shortly after administration. Which possibility requires urgent assessment?",
-    "An acute hypersensitivity reaction",
-    "Expected therapeutic action in every case",
-    "Drug tolerance alone",
-    "A normal cosmetic change",
-    0,
-    "Hives and respiratory symptoms may indicate an allergic reaction, potentially anaphylaxis."
-  ],
-  [
-    "Medication Safety",
-    "Which site is commonly preferred for an adult intramuscular injection when appropriate to the medicine and patient?",
-    "Directly over the sciatic nerve",
-    "Ventrogluteal site",
-    "Into a visibly infected area",
-    "Into a large blood vessel",
-    1,
-    "The ventrogluteal site avoids major nerves and vessels and may be appropriate depending on the product and assessment."
-  ],
-  [
-    "Medication Safety",
-    "What is the purpose of the Z-track technique for an appropriate intramuscular medicine?",
-    "Convert the injection into an intravenous dose",
-    "Remove the need for asepsis",
-    "Reduce leakage of the medicine into subcutaneous tissue",
-    "Make every injection painless",
-    2,
-    "Displacing the skin creates a track that helps seal medicine within muscle after release."
-  ],
-  [
-    "Medication Safety",
-    "A nurse detects a medication error after a dose was given. What is the first priority?",
-    "Alter the record to hide the error",
-    "Assess the patient and initiate measures to reduce harm",
-    "Wait until the end of the week",
-    "Blame the patient",
-    1,
-    "Immediate patient safety comes before reporting and documentation, which must then be completed accurately."
-  ],
-  [
-    "Medication Safety",
-    "A patient says the tablet looks different from the usual medicine. What should the nurse do?",
-    "Insist on swallowing before checking",
-    "Discard the patient's concern",
-    "Pause and verify the medicine and prescription",
-    "Give an extra tablet to compensate",
-    2,
-    "Patient concerns can reveal an error; rechecking identity, medicine and order supports safe administration."
-  ],
-  [
-    "Medication Safety",
-    "A patient with severe renal impairment is prescribed a renally eliminated medicine. What needs review?",
-    "Hair length",
-    "Dose or interval suitability and monitoring for accumulation",
-    "The color of the tablet only",
-    "Whether the patient can read the label as the only concern",
-    1,
-    "Reduced renal clearance can cause accumulation; dosing and monitoring may need adjustment."
-  ],
-  [
-    "Calculations and Priorities",
-    "An infusion of 750 mL is ordered over 5 hours. What pump rate is required?",
-    "75 mL/hour",
-    "150 mL/hour",
-    "250 mL/hour",
-    "375 mL/hour",
-    1,
-    "Divide volume by hours: 750 / 5 = 150 mL/hour."
-  ],
-  [
-    "Calculations and Priorities",
-    "A 500 mL infusion runs over 4 hours through tubing delivering 20 drops/mL. What rate is nearest to the required rate?",
-    "25 drops/min",
-    "42 drops/min",
-    "83 drops/min",
-    "125 drops/min",
-    1,
-    "The rate is (500 x 20) / 240 = 41.7, rounded to 42 drops/min."
-  ],
-  [
-    "Calculations and Priorities",
-    "Microdrip tubing delivers 60 drops/mL. For 90 mL/hour, what drop rate is required?",
-    "15 drops/min",
-    "30 drops/min",
-    "180 drops/min",
-    "90 drops/min",
-    3,
-    "With 60 drops/mL, drops/min equals mL/hour: 90 x 60 / 60 = 90."
-  ],
-  [
-    "Calculations and Priorities",
-    "A prescribed dose is 600 mg. Tablets contain 200 mg each. How many tablets provide the dose?",
-    "1 tablet",
-    "3 tablets",
-    "2 tablets",
-    "6 tablets",
-    1,
-    "The number of tablets is 600 / 200 = 3."
-  ],
-  [
-    "Calculations and Priorities",
-    "A liquid contains 250 mg in 5 mL. What volume provides 375 mg?",
-    "2.5 mL",
-    "5 mL",
-    "10 mL",
-    "7.5 mL",
-    3,
-    "Required volume is (375 / 250) x 5 = 7.5 mL."
-  ],
-  [
-    "Calculations and Priorities",
-    "A patient weighs 60 kg and requires a prescribed dose of 2 mg/kg. What is the total dose?",
-    "30 mg",
-    "120 mg",
-    "60 mg",
-    "240 mg",
-    1,
-    "Multiply the prescribed dose per kilogram by body weight: 2 x 60 = 120 mg."
-  ],
-  [
-    "Calculations and Priorities",
-    "In START disaster triage, a casualty can walk to the designated area. What is the usual initial category?",
-    "Red automatically",
-    "Black automatically",
-    "Green, pending further assessment",
-    "No assessment ever needed",
-    2,
-    "Walking casualties are initially categorized as minor/green in START and still require reassessment."
-  ],
-  [
-    "Calculations and Priorities",
-    "In START triage, an adult is breathing at 36/min after airway assessment. Which category is appropriate?",
-    "Green/minor",
-    "Black automatically",
-    "Yellow solely because a pulse is present",
-    "Red/immediate",
-    3,
-    "Respirations above 30/min are an immediate-category criterion in adult START triage."
-  ],
-  [
-    "Calculations and Priorities",
-    "During adult CPR, which compression rate is recommended?",
-    "40-60 compressions/min",
-    "60-80 compressions/min",
-    "100-120 compressions/min",
-    "150-180 compressions/min",
-    2,
-    "Current adult CPR guidance recommends a compression rate of 100-120/min with high-quality technique."
-  ],
-  [
-    "Calculations and Priorities",
-    "Which entry belongs in the subjective part of a SOAP note?",
-    "A measured temperature of 38.2 degrees C",
-    "The patient's statement, 'My incision hurts'",
-    "The nurse's analysis of the problem",
-    "The planned intervention schedule",
-    1,
-    "Subjective data are reported experiences; objective data are observations or measurements."
-  ]
-];
+const SUPABASE_URL="https://yctpbctqsvdjcrrovocs.supabase.co";
+const SUPABASE_KEY="sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
+const sb=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
+function gate(title,message,login){
+ document.getElementById("gateTitle").textContent=title;
+ document.getElementById("gateMessage").textContent=message;
+ const actions=document.getElementById("gateActions");
+ actions.replaceChildren();
+ const link=document.createElement("a");
+ link.className="primary";link.style.cssText="display:inline-block;padding:12px 20px;border-radius:10px;text-decoration:none;margin-top:12px";
+ link.href=login?"/login.html?next=%2Fmock-test-5.html":"/#package";
+ link.textContent=login?"Login / Create Account":"Unlock Premium Tests";
+ actions.append(link);
+}
 
-const TOTAL=raw.length;
-const qs=raw.map((r,i)=>({
- id:i+1,
- topic:r[0],
- stem:r[1],
- options:r.slice(2,6),
- correct:r[6],
- rationale:r[7]
-}));
-
+let qs=[], TOTAL=0, attempt=null, deadline=0, pending=Promise.resolve(), submitting=false, started=false;
+const storageKey='nm-test5-attempt:';
+let userId='';
+async function api(body) {
+ const {data,error}=await sb.auth.getSession();
+ if(error || !data.session) throw Object.assign(new Error('login_required'),{status:401});
+ const response=await fetch('/api/mock-test-5',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+data.session.access_token},body:JSON.stringify(body)});
+ const result=await response.json();
+ if(!response.ok) throw Object.assign(new Error(result.code),{status:response.status});
+ return result;
+}
+function showFailure(error){
+ E('exam').style.display='none';E('result').style.display='none';
+ if(error.status===401){location.replace('/login.html?next=%2Fmock-test-5.html');return;}
+ E('accessGate').style.display='grid';
+ gate(error.status===403?'Premium Access Required':'Verification unavailable',error.status===403?'Verified premium access is required for Mock Test 5.':'Your access or answers could not be verified. Please retry. Saved progress is retained.',false);
+ if(error.status!==403){
+  E('gateActions').replaceChildren();
+  const retry=document.createElement('button');retry.className='primary';retry.textContent='Retry';retry.onclick=()=>location.reload();E('gateActions').append(retry);
+ }
+}
+async function checkPremiumAccess(){
+ if(location.protocol==='file:'){
+  gate('Server setup required','This secure premium test cannot run by opening an HTML file directly. Open it through a configured Cloudflare Pages preview with its Functions, Supabase tables and server environment variables. See PHASE-1-2.md for setup.',false);
+  E('gateActions').replaceChildren();
+  return;
+ }
+ if(!sb){showFailure(new Error('SDK unavailable'));return;}
+ try{
+  const {data,error}=await sb.auth.getUser();
+  if(error){if(error.status===401 || error.status===403)throw Object.assign(error,{status:401});throw error;}
+  if(!data.user)throw Object.assign(new Error('login_required'),{status:401});
+  userId=data.user.id;
+  const id=localStorage.getItem(storageKey+userId);
+  let state;
+  try{state=await api(id?{action:'load',id}:{action:'start'});}catch(error){if(error.status!==404)throw error;state=await api({action:'start'});}
+  applyState(state);localStorage.setItem(storageKey+userId,state.id);
+  E('accessGate').style.display='none';
+  if(state.submitted){displayResult(state);return;}
+  E('exam').style.display='grid';startExam();
+ }catch(error){showFailure(error);}
+}
+function applyState(state){
+ attempt=state;qs=state.questions;TOTAL=qs.length;answers=state.answers;marked=state.marked;
+ deadline=performance.now()+Math.max(0,state.expiresAt-state.serverNow);
+}
+function saveProgress(){
+ const snapshot={answers:[...answers],marked:[...marked]};
+ pending=pending.catch(()=>{}).then(async()=>{
+  if(finished)return;
+  try{const state=await api({action:'save',id:attempt.id,revision:attempt.revision,...snapshot});attempt.revision=state.revision;if(state.submitted)displayResult(state);}
+  catch(error){showFailure(error);throw error;}
+ });
+ pending.catch(()=>{});
+}
 let current=0;
-let answers=Array(TOTAL).fill(null);
-let marked=Array(TOTAL).fill(false);
+let answers=[];
+let marked=[];
 let secondsLeft=90*60;
 let finished=false;
 let timer=null;
-const deadline=Date.now()+90*60*1000;
 
 const E=id=>document.getElementById(id);
 
@@ -1184,13 +242,14 @@ function render(){
 }
 
 function pick(i){
- if(finished)return;
+ if(finished || submitting)return;
  answers[current]=i;
+ saveProgress();
  render();
 }
 
 function go(i){
- if(finished)return;
+ if(finished || submitting)return;
  if(i<0||i>=TOTAL)return;
  current=i;
  render();
@@ -1201,14 +260,16 @@ function next(){go(current+1)}
 function prev(){go(current-1)}
 
 function toggleMark(){
- if(finished)return;
+ if(finished || submitting)return;
  marked[current]=!marked[current];
+ saveProgress();
  render();
 }
 
 function clearAnswer(){
- if(finished)return;
+ if(finished || submitting)return;
  answers[current]=null;
+ saveProgress();
  render();
 }
 
@@ -1224,8 +285,8 @@ function updateTimer(){
  }
 }
 
-function submitTest(auto){
- if(finished)return;
+async function submitTest(auto){
+ if(finished || submitting)return;
 
  const unanswered=answers.filter(x=>x===null).length;
 
@@ -1239,13 +300,17 @@ function submitTest(auto){
   if(!confirm(message))return;
  }
 
- finished=true;
- clearInterval(timer);
-
- const correct=qs.reduce(
-  (sum,q,i)=>sum+(answers[i]===q.correct?1:0),0
- );
-
+ submitting=true;
+ try{
+  await pending;
+  if(finished)return;
+  const state=await api({action:'submit',id:attempt.id,revision:attempt.revision,answers,marked});
+  displayResult(state,auto);
+ }catch(error){showFailure(error);}finally{submitting=false;}
+}
+function displayResult(state,auto=false){
+ applyState(state);finished=true;clearInterval(timer);E('accessGate').style.display='none';
+ const correct=state.result.correct, unanswered=state.result.unanswered;
  const incorrect=TOTAL-correct-unanswered;
 
  E("exam").style.display="none";
@@ -1327,21 +392,22 @@ function submitTest(auto){
 }
 
 function startExam(){
+started=true;secondsLeft=Math.max(0,Math.ceil((deadline-performance.now())/1000));
 updateTimer();
 render();
 
 timer=setInterval(()=>{
- if(finished)return;
- secondsLeft=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+ if(finished || submitting)return;
+ secondsLeft=Math.max(0,Math.ceil((deadline-performance.now())/1000));
  updateTimer();
  if(secondsLeft===0)submitTest(true);
 },1000);
 }
 
-startExam();
+checkPremiumAccess();
 
 window.addEventListener("beforeunload",event=>{
- if(!finished){
+ if(started && !finished){
   event.preventDefault();
   event.returnValue="";
  }
