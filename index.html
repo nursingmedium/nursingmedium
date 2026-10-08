@@ -72,7 +72,8 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 const grid=document.getElementById('testGrid');
 for(let i=1;i<=10;i++){
   const n=String(i).padStart(2,'0');
-  const live=i===1 || i===2 || i===3;
+  const live=i<=3;
+  const destination=live?`/mock-test-${i}.html`:`/upcoming.html?test=${i}`;
   grid.innerHTML+=`<div class="test">
     <div class="testhead">
       <div class="num">${n}</div>
@@ -80,8 +81,8 @@ for(let i=1;i<=10;i++){
     </div>
     <h3>PGIMER Mock Test ${n}</h3>
     <p>Full-length Nursing Officer practice test.</p>
-    <span class="tag">100 Questions</span> <span class="tag">90 Minutes</span>
-    ${live ? (i===1 ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-1.html">Try Free Mock Test 1 →</a>` : `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/login?next=/mock-test-${i}.html">Unlock Mock Test ${i} →</a>`) : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
+    <span class="tag">${i===4?110:100} Questions</span> <span class="tag">90 Minutes</span>
+    ${i===1 ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-1.html">Try Free Mock Test 1 →</a>` : `<a class="btn ${live?'primary':'outline'}" style="display:block;text-align:center;margin-top:16px" href="/login.html?next=${encodeURIComponent(destination)}">${live?'Unlock':'Login for'} Mock Test ${i} →</a>`}
   </div>`;
 }
 function goToLogin(){window.location.href='/login'}
