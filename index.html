@@ -59,7 +59,7 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 </div></div>
 <div class="price"><div class="popular">BETA LAUNCH</div><div style="color:#667085;font-size:13px;margin-top:18px">PGIMER Premium Mock Series</div><div class="amount">₹399</div><div class="old">₹799</div>
 <ul class="checks"><li>9 premium full-length mocks</li><li>100 questions each</li><li>Detailed explanations</li><li>Result & performance review</li><li>Access from any device</li></ul>
-<a class="btn primary" style="display:block;text-align:center;width:100%" href="#tests">Unlock 9 Premium Mock Tests →</a><div style="font-size:11px;color:#98a2b3;text-align:center;margin-top:12px">Mock Test 1 is free. Payment unlocks Mock Tests 2–10.</div></div></div></div></section>
+<a class="btn primary" style="display:block;text-align:center;width:100%" href="/login?next=/mock-test-2.html">Unlock 9 Premium Mock Tests →</a><div style="font-size:11px;color:#98a2b3;text-align:center;margin-top:12px">Mock Test 1 is free. Payment unlocks Mock Tests 2–10.</div></div></div></div></section>
 
 <section id="tests"><div class="container"><div class="head"><h2>Your mock test roadmap</h2><p>Start with Mock 01 for free. Unlock Mock 02–10 with the premium package.</p></div><div class="tests" id="testGrid"></div></div></section>
 
@@ -81,7 +81,7 @@ for(let i=1;i<=10;i++){
     <h3>PGIMER Mock Test ${n}</h3>
     <p>Full-length Nursing Officer practice test.</p>
     <span class="tag">100 Questions</span> <span class="tag">90 Minutes</span>
-    ${live ? (i===1 ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-1.html">Try Free Mock Test 1 →</a>` : `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/login">Unlock Mock Test ${i} →</a>`) : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
+    ${live ? (i===1 ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-1.html">Try Free Mock Test 1 →</a>` : `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/login?next=/mock-test-${i}.html">Unlock Mock Test ${i} →</a>`) : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
   </div>`;
 }
 function goToLogin(){window.location.href='/login'}
