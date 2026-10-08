@@ -13,7 +13,7 @@ header{background:#095CF8;color:white;padding:17px 22px;position:sticky;top:0;z-
 .brand{font-size:17px;font-weight:800}
 .sub{font-size:12px;color:#dbeafe;margin-top:5px}
 .timer{font-size:24px;font-weight:800;background:#174FC6;color:white;padding:10px 15px;border-radius:10px;white-space:nowrap}
-main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:18px;padding:0 14px}
+main{max-width:1180px;margin:20px auto;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:18px;padding:0 14px}
 .card{background:white;border:1px solid #dbe3ef;border-radius:16px;padding:22px;box-shadow:0 5px 18px #0000000a}
 .badge{display:inline-block;background:#eaf2ff;color:#095CF8;padding:6px 11px;border-radius:99px;font-size:12px;font-weight:800}
 .qnum{color:#64748b;font-size:13px;font-weight:700;margin:15px 0}
@@ -56,14 +56,13 @@ main{grid-template-columns:1fr}
 <div class="top">
 <div>
 <div class="brand">Nursing Medium — PGIMER Nursing Officer</div>
-<div class="sub">Mock Test 4 • 100 Advanced MCQs • 90 Minutes</div>
+<div class="sub">Mock Test 4 • 110 Advanced MCQs • Local Preview • 90 Minutes</div>
 </div>
 <div class="timer" id="timer">90:00</div>
 </div>
 </header>
 
-<div id="accessGate" style="min-height:55vh;display:grid;place-items:center;padding:24px"><div class="card" style="max-width:520px;text-align:center"><h2 id="gateTitle">Verifying Premium Access…</h2><p id="gateMessage">Checking your login and verified purchase.</p><div id="gateActions"></div></div></div>
-<main id="exam" style="display:none">
+<main id="exam">
 <section class="card">
 <span class="badge" id="topic"></span>
 <div class="qnum" id="qnum"></div>
@@ -98,120 +97,8 @@ main{grid-template-columns:1fr}
 <button class="primary" onclick="location.reload()">Restart Test</button>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 "use strict";
-const SUPABASE_URL="https://yctpbctqsvdjcrrovocs.supabase.co";
-const SUPABASE_KEY="sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
-const sb=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
-function gate(title,message,login){
- document.getElementById("gateTitle").textContent=title;
- document.getElementById("gateMessage").textContent=message;
- const actions=document.getElementById("gateActions");
- actions.replaceChildren();
- const link=document.createElement("a");
- link.className="primary";link.style.cssText="display:inline-block;padding:12px 20px;border-radius:10px;text-decoration:none;margin-top:12px";
- link.href=login?"/login?next=%2Fmock-test-4.html":"/#package";
- link.textContent=login?"Login / Create Account":"Unlock Premium Tests";
- actions.append(link);
-}
-
-async function checkPremiumAccess() {
-  if (!sb) {
-    gate(
-      "Connection unavailable",
-      "Authentication service could not load. Please refresh.",
-      true
-    );
-    return false;
-  }
-
-  try {
-    const { data: authData, error: authError } =
-      await sb.auth.getUser();
-
-    if (authError || !authData?.user) {
-      window.location.replace(
-        "/login?next=%2Fmock-test-4.html"
-      );
-      return false;
-    }
-
-    const user = authData.user;
-
-    const { data, error } = await sb
-      .from("purchases")
-      .select("id,package_id,status")
-      .eq("user_id", user.id)
-      .eq("status", "paid")
-      .limit(1);
-
-    if (error) {
-      console.error(
-        "Nursing Medium premium verification:",
-        error.code,
-        error.message,
-        error.details
-      );
-
-      gate(
-        "Verification unavailable",
-        "We couldn't check your premium access. Please try again shortly.",
-        false
-      );
-      return false;
-    }
-
-    if (!data || data.length === 0) {
-      gate(
-        "Premium Access Required",
-        "Please purchase the premium package to unlock Mock Test 4.",
-        false
-      );
-      return false;
-    }
-
-    document.getElementById("accessGate").remove();
-    document.getElementById("exam").style.display = "grid";
-
-    startExam();
-    return true;
-
-  } catch (err) {
-    console.error("Premium access exception:", err);
-
-    gate(
-      "Verification unavailable",
-      "Unable to connect to the verification service. Please refresh and try again.",
-      false
-    );
-    return false;
-  }
-}
-
-if(error){
-  console.error("SUPABASE PURCHASE ERROR:",error);
-  gate("Verification unavailable",
-       "Could not verify your purchase. Please try again later.",
-       false);
-  return false;
-}
-
-  if(error){gate("Verification unavailable","Could not verify your purchase. Please try again later.",false);return false;}
-  if(!data?.length){gate("Premium Access Required","Mock Test 4 is available only after verified premium purchase.",false);return false;}
-  document.getElementById("accessGate").remove();
-  document.getElementById("exam").style.display="grid";
-  startExam();return true;
- }catch(e){gate("Verification unavailable","Please check your connection and refresh.",false);return false;}
-}
-
-
-/*
-Question format:
-[Topic, Question, Option A, Option B, Option C,
- Option D, Correct option (0=A,1=B,2=C,3=D), Rationale]
-*/
-
 const raw = [
 ["Cardiology","A patient with an inferior-wall MI becomes hypotensive after nitroglycerin. Lungs remain clear, and jugular veins are distended. Which complication is most likely?","Acute left ventricular pulmonary edema","Right ventricular infarction with preload dependence","Aortic regurgitation","Pulmonary venous hypertension",1,"Inferior MI with clear lungs, elevated JVP and nitrate-associated hypotension suggests right ventricular involvement. Preload reduction may worsen cardiac output."],
 ["Cardiology","An ICU patient has a regular wide-complex tachycardia at 170/min, BP 72/40 mmHg and altered mentation. A pulse is present. Which intervention is indicated?","Vagal maneuvers only","Unscheduled defibrillation for every wide-complex rhythm","Immediate synchronized cardioversion","Observation until troponin results",2,"Unstable tachycardia with a pulse generally requires immediate synchronized cardioversion."],
@@ -353,6 +240,7 @@ let marked=Array(TOTAL).fill(false);
 let secondsLeft=90*60;
 let finished=false;
 let timer=null;
+const deadline=Date.now()+90*60*1000;
 
 const E=id=>document.getElementById(id);
 
@@ -566,13 +454,13 @@ render();
 
 timer=setInterval(()=>{
  if(finished)return;
- secondsLeft=Math.max(0,secondsLeft-1);
+ secondsLeft=Math.max(0,Math.ceil((deadline-Date.now())/1000));
  updateTimer();
  if(secondsLeft===0)submitTest(true);
 },1000);
 }
 
-checkPremiumAccess();
+startExam();
 
 window.addEventListener("beforeunload",event=>{
  if(!finished){
