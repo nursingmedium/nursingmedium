@@ -54,245 +54,83 @@ main{grid-template-columns:1fr}.nav{position:static;order:-1}
 </aside>
 </main>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL = "https://yctpbctqsvdjcrrovocs.supabase.co";
-const SUPABASE_KEY = "sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-(async function requireLogin(){
-  const {data:{user}} = await sb.auth.getUser();
-  if(!user){
-    window.location.replace("/login?next=/mock-test-1.html");
-    return;
-  }
-  startMock();
-})();
+// Standalone mock test: works locally and on GitHub Pages without login.
+startMock();
 
 function startMock(){
 const data = [{"id": 1, "q": "A patient with septic shock remains hypotensive after adequate initial crystalloid resuscitation. MAP is 58 mmHg and lactate is 4.8 mmol/L. Which intervention is the priority?", "opts": ["Start norepinephrine and titrate to a MAP of at least 65 mmHg", "Give another large crystalloid bolus regardless of pulmonary status", "Start dopamine specifically to improve renal perfusion", "Administer furosemide to increase urine output"], "ans": 0, "rat": "Norepinephrine is the preferred first-line vasopressor when hypotension persists after initial fluid resuscitation in septic shock."}, {"id": 2, "q": "A patient with severe traumatic brain injury suddenly develops a fixed dilated pupil, decreasing consciousness, bradycardia, and hypertension. What is the priority?", "opts": ["Immediately escalate for emergent intracranial-pressure/herniation management", "Place the patient flat and rapidly infuse maintenance fluids", "Give an opioid to suppress the sympathetic response", "Perform repeated deep suctioning"], "ans": 0, "rat": "The combination strongly suggests impending cerebral herniation and requires immediate escalation."}, {"id": 3, "q": "A patient receiving unfractionated heparin has a platelet count falling from 220,000 to 92,000/mm3 on day 7 and develops a new DVT. What is the best action?", "opts": ["Stop all heparin and anticipate a non-heparin anticoagulant", "Continue heparin and transfuse platelets", "Reduce the heparin dose by 50%", "Start warfarin immediately as sole therapy"], "ans": 0, "rat": "A greater than 50% platelet fall with thrombosis 5–10 days after heparin is highly suggestive of HIT."}, {"id": 4, "q": "A patient with DKA has glucose 520 mg/dL, pH 7.12, positive ketones, and potassium 3.0 mEq/L. Which order should be questioned?", "opts": ["Start IV insulin immediately at the standard rate", "Begin isotonic IV fluids", "Replace potassium before insulin", "Monitor potassium and cardiac rhythm closely"], "ans": 0, "rat": "Insulin shifts potassium intracellularly. With severe hypokalemia, potassium replacement is required before insulin."}, {"id": 5, "q": "A patient with acute pulmonary edema has SpO2 78%, BP 210/118 mmHg, and diffuse crackles. What should be prioritized?", "opts": ["Noninvasive positive-pressure ventilation with treatment of the hypertensive emergency", "Supine positioning and increased maintenance fluids", "A rapid large-volume IV fluid bolus", "Encouraging oral fluids"], "ans": 0, "rat": "Severe cardiogenic pulmonary edema requires rapid oxygenation/ventilatory support and reduction of preload/afterload."}, {"id": 6, "q": "A patient with SIADH has sodium 116 mEq/L and a generalized seizure. Which treatment is most appropriate?", "opts": ["Carefully administered hypertonic saline with close sodium monitoring", "Hypotonic saline", "Unrestricted oral water", "Desmopressin"], "ans": 0, "rat": "Severe symptomatic hyponatremia is treated with carefully controlled hypertonic saline."}, {"id": 7, "q": "A patient with AKI has potassium 7.1 mEq/L, peaked T waves, and QRS widening. Which medication first stabilizes the myocardium?", "opts": ["IV calcium gluconate", "IV regular insulin alone", "Nebulized salbutamol alone", "Oral potassium binder"], "ans": 0, "rat": "IV calcium rapidly stabilizes the cardiac membrane but does not itself remove potassium."}, {"id": 8, "q": "A patient receiving magnesium sulfate for severe preeclampsia develops RR 8/min, absent patellar reflexes, and oliguria. What should the nurse do?", "opts": ["Stop magnesium sulfate and prepare calcium gluconate", "Increase the magnesium infusion", "Administer oxytocin", "Place the patient in Trendelenburg"], "ans": 0, "rat": "Respiratory depression and absent reflexes indicate magnesium toxicity."}, {"id": 9, "q": "A COPD patient receiving oxygen becomes increasingly somnolent with a respiratory rate of 8/min. Which finding is most concerning?", "opts": ["Increasing somnolence with severe bradypnea", "SpO2 improving from 84% to 90%", "Reduced accessory muscle use", "Reduced anxiety"], "ans": 0, "rat": "New somnolence and bradypnea suggest worsening hypercapnic respiratory failure."}, {"id": 10, "q": "After thyroidectomy, a patient develops perioral tingling and carpopedal spasm. Which abnormality is most likely?", "opts": ["Decreased ionized calcium", "Decreased sodium", "Increased magnesium", "Increased potassium"], "ans": 0, "rat": "Post-thyroidectomy hypocalcemia can occur from parathyroid injury and causes neuromuscular irritability."}, {"id": 11, "q": "A patient receiving IV amiodarone develops new hypotension and marked bradycardia. What is the priority?", "opts": ["Reassess immediately and notify the prescriber/adjust therapy as indicated", "Give the next dose faster", "Encourage ambulation", "Ignore it as an expected therapeutic effect"], "ans": 0, "rat": "IV amiodarone can produce significant hypotension and bradycardia."}, {"id": 12, "q": "A patient with suspected bacterial meningitis arrives in the ED. Which action is appropriate?", "opts": ["Implement droplet precautions and facilitate prompt antimicrobial treatment", "Use airborne isolation only", "Delay antibiotics until all imaging is completed", "Encourage ambulation"], "ans": 0, "rat": "Bacterial meningitis requires appropriate isolation and rapid antimicrobial treatment without harmful diagnostic delay."}, {"id": 13, "q": "A patient receiving vancomycin develops flushing and pruritus during a rapid infusion. What is most likely?", "opts": ["Vancomycin infusion reaction related to rapid administration", "Acute hemolytic reaction", "Serotonin syndrome", "Anticholinergic toxicity"], "ans": 0, "rat": "Rapid vancomycin administration can cause histamine-mediated infusion reactions."}, {"id": 14, "q": "A patient with acute ischemic stroke is being considered for thrombolysis. Which finding is a definitive concern?", "opts": ["Intracranial hemorrhage on brain imaging", "Glucose 118 mg/dL", "Symptoms began 60 minutes ago", "BP 168/94 mmHg"], "ans": 0, "rat": "Intracranial hemorrhage is a contraindication to thrombolytic therapy."}, {"id": 15, "q": "A patient with myasthenia gravis develops progressive dysphagia and shallow respirations after infection. What most strongly supports myasthenic crisis?", "opts": ["Progressive respiratory muscle weakness with reduced vital capacity", "Pinpoint pupils and salivation", "Severe rigidity and hyperreflexia", "Improvement after withholding all therapy"], "ans": 0, "rat": "Myasthenic crisis is characterized by worsening bulbar and respiratory muscle weakness."}, {"id": 16, "q": "A patient with Parkinson disease is NPO after aspiration. Which medication-related action is most important?", "opts": ["Avoid unnecessary interruption of scheduled antiparkinsonian therapy", "Hold all antiparkinsonian drugs until oral intake resumes", "Give levodopa only when tremor is severe", "Replace missed doses with opioids"], "ans": 0, "rat": "Abrupt interruption of dopaminergic therapy can cause severe rigidity and systemic complications."}, {"id": 17, "q": "A patient with cirrhosis has hematemesis, BP 82/50 mmHg, and tachycardia. Which drug is commonly initiated early for suspected variceal bleeding?", "opts": ["IV octreotide", "IV morphine", "Insulin glargine", "Lactulose as sole emergency therapy"], "ans": 0, "rat": "Octreotide reduces splanchnic blood flow and portal pressure and is used early in variceal hemorrhage."}, {"id": 18, "q": "A patient receiving digoxin has nausea, yellow-green visual changes, and an apical pulse of 48/min. What should the nurse do?", "opts": ["Hold digoxin and assess serum digoxin level, potassium, and renal function", "Administer the next dose with food", "Give potassium without checking the level", "Encourage vigorous exercise"], "ans": 0, "rat": "These are classic warning signs of possible digoxin toxicity."}, {"id": 19, "q": "A patient develops fever, chills, flank pain, and hypotension 15 minutes after a blood transfusion starts. What is first?", "opts": ["Stop the transfusion immediately and maintain IV access with normal saline using new tubing", "Slow the transfusion and reassess later", "Flush the tubing with dextrose", "Discard the blood bag before notifying anyone"], "ans": 0, "rat": "These findings suggest an acute transfusion reaction. Stop the blood first and follow the reaction protocol."}, {"id": 20, "q": "A patient with inferior STEMI becomes profoundly hypotensive after nitroglycerin. Which complication should be suspected?", "opts": ["Right ventricular infarction with preload dependence", "Acute left ventricular failure from excess preload", "Simple pericarditis", "Aortic stenosis"], "ans": 0, "rat": "Right ventricular infarction is preload dependent and nitrates can cause severe hypotension."}, {"id": 21, "q": "A patient with acute pancreatitis has severe epigastric pain radiating to the back. Which laboratory finding is most expected?", "opts": ["Markedly elevated serum lipase", "Markedly decreased lipase", "Severe isolated unconjugated hyperbilirubinemia in every case", "Low calcium is required for diagnosis"], "ans": 0, "rat": "Serum lipase is typically elevated in acute pancreatitis."}, {"id": 22, "q": "A patient with Addisonian crisis has BP 76/42, sodium 124, potassium 6.2, and glucose 52 mg/dL. What is most urgent?", "opts": ["Rapid isotonic fluid, IV glucocorticoid, and correction of hypoglycemia", "Fluid restriction", "Loop diuretic monotherapy", "Insulin without glucose"], "ans": 0, "rat": "Adrenal crisis causes hypotension, electrolyte abnormalities, and hypoglycemia requiring immediate treatment."}, {"id": 23, "q": "A patient with pheochromocytoma is prepared for surgery. Which sequence is correct?", "opts": ["Alpha blockade before beta blockade", "Beta blockade before alpha blockade", "Diuretic before alpha blockade", "Calcium before beta blockade"], "ans": 0, "rat": "Alpha blockade must precede beta blockade to avoid unopposed alpha-mediated vasoconstriction."}, {"id": 24, "q": "A patient with acute liver failure has confusion and asterixis. Which treatment reduces intestinal ammonia absorption?", "opts": ["Lactulose titrated to regular soft stools", "Permanent severe protein restriction", "IV iron", "Loop diuretics"], "ans": 0, "rat": "Lactulose traps ammonia as ammonium in the colon and increases fecal nitrogen elimination."}, {"id": 25, "q": "A patient with Guillain-Barré syndrome has rapidly progressive weakness. Which assessment is highest priority?", "opts": ["Serial forced vital capacity and respiratory muscle strength", "Daily visual acuity", "Bowel sounds only", "Skin turgor only"], "ans": 0, "rat": "Respiratory muscle paralysis can develop rapidly in Guillain-Barré syndrome."}, {"id": 26, "q": "A patient with tibial fracture has escalating pain despite opioids and pain on passive toe movement. What is the priority?", "opts": ["Immediate surgical evaluation for compartment decompression", "Elevate the limb far above the heart and apply ice continuously", "Apply a tighter compression dressing", "Encourage weight-bearing"], "ans": 0, "rat": "Pain out of proportion and pain with passive stretch are red flags for compartment syndrome."}, {"id": 27, "q": "A patient suddenly becomes dyspneic and hypotensive with suspected PE. Which finding directly supports the diagnosis?", "opts": ["CT pulmonary angiography showing a pulmonary arterial filling defect", "Normal D-dimer despite high clinical suspicion", "Mild hyperinflation on chest X-ray", "Normal ECG alone"], "ans": 0, "rat": "A pulmonary arterial filling defect on CT angiography directly supports PE."}, {"id": 28, "q": "A patient with a mechanical heart valve takes warfarin. Which laboratory test monitors therapy?", "opts": ["INR", "aPTT", "Bleeding time", "Fibrinogen alone"], "ans": 0, "rat": "Warfarin is monitored using PT expressed as INR."}, {"id": 29, "q": "A patient taking sertraline receives linezolid and develops agitation, diaphoresis, hyperreflexia, and clonus. What is most likely?", "opts": ["Serotonin syndrome", "Neuroleptic malignant syndrome", "Malignant hyperthermia", "Anticholinergic syndrome"], "ans": 0, "rat": "Linezolid has MAOI activity; clonus and hyperreflexia strongly support serotonin syndrome."}, {"id": 30, "q": "A patient taking lithium develops coarse tremor, diarrhea, ataxia, and confusion. What should the nurse do?", "opts": ["Hold lithium and urgently assess serum level, renal function, and hydration", "Give the next dose with extra salt restriction", "Give an NSAID to increase clearance", "Encourage dehydration"], "ans": 0, "rat": "These findings suggest lithium toxicity, which is strongly influenced by renal function and hydration."}, {"id": 31, "q": "A patient remains in status epilepticus after adequate benzodiazepine therapy. Which is appropriate next-line treatment?", "opts": ["IV levetiracetam or fosphenytoin according to protocol", "Oral carbamazepine only", "Subcutaneous insulin", "IM haloperidol"], "ans": 0, "rat": "Established status epilepticus generally requires a second-line IV antiseizure drug after benzodiazepines."}, {"id": 32, "q": "A patient with severe asthma has a silent chest, exhaustion, and rising PaCO2. What does this suggest?", "opts": ["Impending respiratory muscle fatigue and ventilatory failure", "Definite improvement", "Metabolic alkalosis", "Resolution of bronchospasm"], "ans": 0, "rat": "A normalizing or rising PaCO2 in severe asthma can indicate respiratory muscle fatigue."}, {"id": 33, "q": "Which ventilator strategy is most consistent with lung-protective ventilation for ARDS?", "opts": ["Low tidal volume based on predicted body weight with appropriate PEEP", "High tidal volume based on actual body weight", "Zero PEEP", "Routine extreme hyperventilation"], "ans": 0, "rat": "ARDS ventilation uses low tidal volume based on predicted body weight and appropriate PEEP."}, {"id": 34, "q": "Immediately after central venous catheter insertion, a patient develops dyspnea, hypotension, and unilateral absent breath sounds. What is most likely?", "opts": ["Iatrogenic tension pneumothorax", "Pulmonary edema", "Pericarditis", "Hypoalbuminemic pleural effusion"], "ans": 0, "rat": "Sudden respiratory compromise after central line placement strongly suggests pneumothorax; tension physiology is an emergency."}, {"id": 35, "q": "A patient with infective endocarditis develops sudden focal neurologic deficit. Which complication should be considered?", "opts": ["Embolic ischemic stroke from valvular vegetation", "Migraine", "Peripheral neuropathy", "Hypoglycemia only"], "ans": 0, "rat": "Endocarditis vegetations can embolize and cause ischemic stroke."}, {"id": 36, "q": "Why are patients with nephrotic syndrome at increased risk for venous thrombosis?", "opts": ["Urinary loss of anticoagulant proteins creates a hypercoagulable state", "They always have severe dehydration", "They have universal thrombocytopenia", "They develop respiratory alkalosis"], "ans": 0, "rat": "Urinary loss of antithrombin and other anticoagulant proteins contributes to hypercoagulability."}, {"id": 37, "q": "A patient with severe hypocalcemia has prolonged QT and ventricular ectopy. What is appropriate?", "opts": ["IV calcium replacement with continuous cardiac monitoring", "IV bicarbonate alone", "Rapid potassium infusion regardless of level", "Fluid restriction"], "ans": 0, "rat": "Symptomatic severe hypocalcemia with ECG abnormalities requires IV calcium and monitoring."}, {"id": 38, "q": "A patient has pH 7.20, HCO3 12 mEq/L, and PaCO2 25 mmHg. What is the best interpretation?", "opts": ["Primary metabolic acidosis with respiratory compensation", "Primary respiratory acidosis", "Primary metabolic alkalosis", "Uncompensated respiratory alkalosis"], "ans": 0, "rat": "Low bicarbonate indicates metabolic acidosis; low PaCO2 reflects respiratory compensation."}, {"id": 39, "q": "A patient with acute stroke has dysphagia. What should occur before oral intake?", "opts": ["Validated swallow assessment", "Thin liquids as a test", "Food placed on the affected side", "Rapid drinking through a straw"], "ans": 0, "rat": "Stroke-related dysphagia can cause silent aspiration; swallowing safety must be assessed first."}, {"id": 40, "q": "A tracheostomy patient becomes distressed and the suction catheter cannot pass. What is the priority?", "opts": ["Suspect obstruction/displacement and initiate emergency airway management", "Increase tube feeding", "Wait after cuff deflation", "Place the patient flat"], "ans": 0, "rat": "Inability to pass a suction catheter with acute distress suggests obstruction or displacement."}, {"id": 41, "q": "A patient receiving hypertonic saline for severe hyponatremia has sodium rise by 10 mEq/L in 6 hours. What is concerning?", "opts": ["Overly rapid correction and risk of osmotic demyelination", "Expected correction with no concern", "Worsening SIADH", "Acute hyperkalemia"], "ans": 0, "rat": "Rapid correction of chronic hyponatremia can cause osmotic demyelination."}, {"id": 42, "q": "A patient with suspected acute aortic dissection has tearing chest pain and unequal arm pressures. What medication strategy is prioritized?", "opts": ["IV beta blockade to reduce aortic shear stress", "Immediate thrombolysis", "Immediate anticoagulation before imaging", "Exercise"], "ans": 0, "rat": "Initial medical therapy reduces heart rate and aortic shear stress, commonly with IV beta blockade."}, {"id": 43, "q": "A patient with severe mitral stenosis develops atrial fibrillation and pulmonary edema. Why can AF worsen symptoms?", "opts": ["Loss of atrial contraction impairs LV filling across the stenotic valve", "Atrial contraction becomes stronger", "Diastole becomes longer", "Pulmonary venous pressure always falls"], "ans": 0, "rat": "Atrial contraction contributes to ventricular filling across a stenotic mitral valve; AF can worsen congestion."}, {"id": 44, "q": "A postoperative patient develops confusion, tachycardia, hypotension, abdominal distension, and falling hemoglobin. What is the priority concern?", "opts": ["Occult intra-abdominal hemorrhage with hemorrhagic shock", "Expected postoperative pain", "Mild atelectasis", "Routine anemia"], "ans": 0, "rat": "The combination strongly suggests internal bleeding and requires urgent escalation."}, {"id": 45, "q": "A patient on heparin has markedly prolonged aPTT and active bleeding. What is the appropriate initial action?", "opts": ["Stop heparin and follow the anticoagulation-reversal protocol", "Increase heparin", "Give aspirin", "Encourage ambulation"], "ans": 0, "rat": "Active bleeding with excessive anticoagulation requires stopping heparin and appropriate reversal/management."}, {"id": 46, "q": "An unconscious patient with type 1 diabetes has glucose 38 mg/dL and no IV access. What is appropriate?", "opts": ["IM glucagon while emergency vascular access is obtained", "Oral glucose", "Long-acting insulin", "Carbohydrate restriction"], "ans": 0, "rat": "Unconscious patients should not receive oral intake. Glucagon is appropriate when IV access is unavailable."}, {"id": 47, "q": "A patient taking clozapine develops fever, sore throat, and profound neutropenia. What is the priority?", "opts": ["Withhold clozapine and urgently evaluate for agranulocytosis/infection", "Continue clozapine", "Increase clozapine", "Give only an anticholinergic"], "ans": 0, "rat": "Clozapine can cause severe neutropenia/agranulocytosis requiring urgent evaluation."}, {"id": 48, "q": "A patient taking haloperidol develops high fever, severe rigidity, autonomic instability, and altered consciousness. What is most likely?", "opts": ["Neuroleptic malignant syndrome", "Serotonin syndrome", "Malignant hyperthermia", "Acute dystonia"], "ans": 0, "rat": "NMS is characterized by hyperthermia, severe rigidity, autonomic instability, and altered mental status."}, {"id": 49, "q": "A patient develops sudden aphasia and unilateral weakness while receiving heparin. What should the nurse do first?", "opts": ["Activate the acute stroke response and establish exact symptom-onset time", "Give more heparin", "Wait for the next routine assessment", "Give oral food"], "ans": 0, "rat": "Stroke treatment is highly time dependent; rapid assessment and onset-time documentation are essential."}, {"id": 50, "q": "A pregnant patient with severe hypertension has RUQ pain, headache, visual symptoms, platelets 72,000/mm3, and markedly elevated AST. What is most likely?", "opts": ["HELLP syndrome", "Placenta previa", "Gestational diabetes", "Hyperemesis gravidarum"], "ans": 0, "rat": "HELLP is characterized by hemolysis, elevated liver enzymes, and low platelets and is a severe pregnancy complication."}, {"id": 51, "q": "A pregnant patient has painless bright-red third-trimester bleeding and a soft, nontender uterus. What is most likely?", "opts": ["Placenta previa", "Placental abruption", "Uterine rupture", "Hyperemesis"], "ans": 0, "rat": "Painless bright-red third-trimester bleeding with a nontender uterus is classic for placenta previa."}, {"id": 52, "q": "A postpartum patient has heavy bleeding and a boggy enlarged uterus. What is the priority?", "opts": ["Uterine massage and immediate postpartum-hemorrhage management", "Continuous abdominal pressure without assessment", "Ambulation", "Waiting for hemoglobin"], "ans": 0, "rat": "Uterine atony is the most common cause of postpartum hemorrhage; fundal massage and rapid escalation are priorities."}, {"id": 53, "q": "A newborn remains apneic after drying, warming, positioning, and stimulation; HR is 80/min. What is next?", "opts": ["Positive-pressure ventilation", "Chest compressions immediately", "Oral glucose", "Routine deep suctioning"], "ans": 0, "rat": "Apnea or HR below 100/min after initial steps requires positive-pressure ventilation."}, {"id": 54, "q": "A child with Tetralogy of Fallot develops a hypercyanotic spell. Which position is best?", "opts": ["Knee-chest", "Supine with legs extended", "Prone with head below heart", "High Fowler with legs dangling"], "ans": 0, "rat": "Knee-chest positioning increases systemic vascular resistance and reduces right-to-left shunting."}, {"id": 55, "q": "A child with epiglottitis has drooling, muffled voice, fever, and tripod positioning. Which action is unsafe?", "opts": ["Attempting to inspect the throat with a tongue depressor", "Keeping the child calm", "Preparing for controlled airway management", "Providing oxygen as tolerated"], "ans": 0, "rat": "Throat manipulation can precipitate complete airway obstruction in epiglottitis."}, {"id": 56, "q": "A child with nephrotic syndrome develops sudden abdominal pain, fever, and guarding. Which complication is concerning?", "opts": ["Spontaneous bacterial peritonitis", "Constipation", "Simple renal stone", "Otitis media"], "ans": 0, "rat": "Nephrotic syndrome increases infection risk because of urinary loss of immunoglobulins and complement."}, {"id": 57, "q": "A child with DKA on insulin develops potassium 2.8 mEq/L. What is the priority?", "opts": ["Urgent potassium replacement and reassessment of insulin therapy", "Increase insulin rate", "Restrict potassium", "Give oral water only"], "ans": 0, "rat": "Insulin can worsen hypokalemia; severe hypokalemia requires urgent correction."}, {"id": 58, "q": "A patient with tuberculosis is taking rifampicin. Which teaching is correct?", "opts": ["Orange-red discoloration of urine, tears, and other body fluids can occur", "The drug must be stopped if urine turns orange", "It has no drug interactions", "It routinely causes severe hypoglycemia"], "ans": 0, "rat": "Rifampicin commonly causes orange-red discoloration and has important drug interactions."}, {"id": 59, "q": "A patient with suspected C. difficile infection requires which infection-control approach?", "opts": ["Contact precautions and soap-and-water hand hygiene", "Alcohol hand rub alone", "Airborne precautions only", "Standard precautions without enhanced cleaning"], "ans": 0, "rat": "C. difficile spores resist alcohol-based hand rubs; soap-and-water and contact precautions are important."}, {"id": 60, "q": "A severely neutropenic patient has a single oral temperature of 38.3°C. What is the priority?", "opts": ["Treat as a potential neutropenic emergency and promptly obtain cultures/start empiric therapy as ordered", "Wait until 39.5°C", "Give a live vaccine", "Delay assessment for 24 hours"], "ans": 0, "rat": "Fever in severe neutropenia can represent rapidly progressive infection and requires urgent evaluation."}, {"id": 61, "q": "A patient with sickle cell disease has severe pain and hypoxemia. What complication must be considered urgently?", "opts": ["Acute chest syndrome", "Simple muscle strain", "Chronic emphysema", "Otitis media"], "ans": 0, "rat": "Hypoxemia with sickle cell disease and pain raises concern for acute chest syndrome."}, {"id": 62, "q": "A patient with severe pancreatitis develops bilateral infiltrates and severe hypoxemia. What complication is likely?", "opts": ["ARDS", "Simple bronchitis", "Chronic emphysema", "Uncomplicated effusion only"], "ans": 0, "rat": "Severe pancreatitis can trigger systemic inflammation and ARDS."}, {"id": 63, "q": "A patient with hepatic encephalopathy has asterixis. Which teaching is most appropriate?", "opts": ["Avoid unnecessary severe protein restriction and treat precipitating factors with prescribed therapy", "Eliminate all protein permanently", "Increase alcohol intake", "Use sedatives freely"], "ans": 0, "rat": "Routine severe protein restriction is not recommended; adequate nutrition and treatment of triggers are important."}, {"id": 64, "q": "After pituitary surgery, a patient has urine output 700 mL/hr, intense thirst, and sodium 153 mEq/L. What is likely?", "opts": ["Central diabetes insipidus", "SIADH", "Adrenal crisis", "Cerebral salt wasting"], "ans": 0, "rat": "Pituitary injury can cause central DI with polyuria, hypernatremia, and dilute urine."}, {"id": 65, "q": "A patient with central DI receives desmopressin. Which finding indicates effectiveness?", "opts": ["Urine output decreases and urine concentration increases", "Urine output rises further", "Serum sodium rises rapidly", "Urine becomes more dilute"], "ans": 0, "rat": "Desmopressin replaces ADH activity and reduces polyuria while increasing urine concentration."}, {"id": 66, "q": "A postoperative patient has severe suprapubic discomfort and bladder distension with acute urinary retention. What is appropriate?", "opts": ["Assess bladder and perform catheterization if indicated/prescribed", "Give a diuretic first", "Encourage large oral fluids first", "Apply continuous abdominal pressure"], "ans": 0, "rat": "Acute retention requires prompt bladder assessment and decompression when indicated."}, {"id": 67, "q": "A chest tube has continuous bubbling in the water-seal chamber. What should the nurse assess first?", "opts": ["The drainage system, connections, and insertion site for an air leak", "Clamp the tube routinely", "Strip the tube aggressively", "Disconnect the system"], "ans": 0, "rat": "Continuous bubbling can indicate an air leak; the system should be checked systematically."}, {"id": 68, "q": "A ventilated patient suddenly desaturates and the high-pressure alarm sounds. What should be assessed first?", "opts": ["Airway obstruction from secretions, biting, bronchospasm, or tubing kinking", "Circuit disconnection", "Low oxygen supply only", "Humidifier water level only"], "ans": 0, "rat": "High-pressure alarms usually indicate increased resistance to airflow."}, {"id": 69, "q": "A patient receiving IV furosemide requires monitoring for which abnormality?", "opts": ["Hypokalemia and other electrolyte/volume losses", "Universal hypercalcemia", "Universal hypermagnesemia", "Hypernatremia in every patient"], "ans": 0, "rat": "Loop diuretics can cause potassium and magnesium loss and volume depletion."}, {"id": 70, "q": "A patient receiving aminoglycoside therapy develops rising creatinine and tinnitus. What is appropriate?", "opts": ["Hold/clarify therapy and assess renal function and drug toxicity", "Increase the dose", "Add another nephrotoxic drug", "Continue without monitoring"], "ans": 0, "rat": "Aminoglycosides can cause nephrotoxicity and ototoxicity."}, {"id": 71, "q": "A patient taking metformin develops severe sepsis with acute kidney injury and tissue hypoxia. Which action is appropriate?", "opts": ["Withhold metformin during significant AKI/hypoxic illness and reassess therapy", "Increase metformin", "Add extra doses", "Ignore renal function"], "ans": 0, "rat": "Significant renal dysfunction and severe hypoxia increase concern for metformin-associated lactic acidosis."}, {"id": 72, "q": "A patient taking an ACE inhibitor develops tongue swelling and stridor. What is the priority?", "opts": ["Treat as life-threatening angioedema and secure the airway urgently", "Give the next ACE inhibitor dose", "Wait for oral antihistamine response", "Encourage oral fluids"], "ans": 0, "rat": "ACE-inhibitor angioedema can rapidly obstruct the airway."}, {"id": 73, "q": "A patient taking spironolactone has potassium 6.0 mEq/L and peaked T waves. Which order should be questioned?", "opts": ["Continue spironolactone at the current dose", "Place the patient on cardiac monitoring", "Repeat potassium urgently", "Treat hyperkalemia as prescribed"], "ans": 0, "rat": "Spironolactone is potassium-sparing and should not be continued during significant hyperkalemia without reassessment."}, {"id": 74, "q": "A patient receiving IV potassium chloride reports intense burning at the IV site. What should the nurse do?", "opts": ["Pause the infusion and assess the IV site; never administer IV potassium by IV push", "Increase the rate", "Give potassium by IV push", "Ignore the symptom"], "ans": 0, "rat": "IV potassium is irritating and must be diluted and infused at a controlled rate."}, {"id": 75, "q": "A patient with PE is receiving unfractionated heparin. Which concurrent prescription should be questioned if not clearly indicated?", "opts": ["NSAID therapy because of increased bleeding risk", "Oxygen", "Prescribed stool softener", "Routine vital signs"], "ans": 0, "rat": "NSAIDs can impair platelet function and increase bleeding risk during anticoagulation."}, {"id": 76, "q": "A patient with acute ischemic stroke is otherwise eligible for thrombolysis but BP is 198/112 mmHg. What should occur?", "opts": ["Lower BP to the protocol threshold before thrombolysis", "Give thrombolysis immediately despite BP", "Increase BP further", "Delay all treatment for 24 hours"], "ans": 0, "rat": "Blood pressure must be below the accepted threshold before IV thrombolysis."}, {"id": 77, "q": "A patient with an epidural analgesia develops new bilateral leg weakness and severe back pain. What is the priority concern?", "opts": ["Epidural hematoma or other neuraxial emergency", "Expected opioid effect", "Normal postoperative fatigue", "Simple dehydration"], "ans": 0, "rat": "New motor weakness and severe back pain after neuraxial procedures require urgent evaluation for compressive complications."}, {"id": 78, "q": "A patient using PCA morphine is difficult to arouse, RR 7/min, SpO2 82%. What is the priority?", "opts": ["Stop opioid administration, support ventilation, and prepare naloxone as indicated", "Increase PCA dose", "Allow the patient to sleep", "Give a benzodiazepine"], "ans": 0, "rat": "Severe opioid-induced respiratory depression is an airway and ventilation emergency."}, {"id": 79, "q": "A septic patient remains oliguric with altered mentation and lactate 6 mmol/L after initial resuscitation. What indicates ongoing hypoperfusion?", "opts": ["Persistent elevated lactate with worsening organ dysfunction", "Mild thirst", "Temperature 37°C", "Normal capillary refill alone"], "ans": 0, "rat": "Persistent hyperlactatemia with oliguria and altered mentation suggests ongoing tissue hypoperfusion."}, {"id": 80, "q": "A drug is prescribed at 0.4 mg/kg for a 75-kg patient. The vial contains 20 mg/mL. How many mL are required?", "opts": ["1.5 mL", "0.67 mL", "2.5 mL", "15 mL"], "ans": 0, "rat": "0.4 × 75 = 30 mg; 30 ÷ 20 = 1.5 mL."}, {"id": 81, "q": "An infusion contains 25,000 units heparin in 250 mL. The order is 1,200 units/hr. What pump rate is required?", "opts": ["12 mL/hr", "10 mL/hr", "8 mL/hr", "15 mL/hr"], "ans": 0, "rat": "Concentration is 100 units/mL; 1,200 ÷ 100 = 12 mL/hr."}, {"id": 82, "q": "A patient is prescribed ceftriaxone 1.5 g IV. The solution contains 250 mg/mL. What volume is required?", "opts": ["6 mL", "3 mL", "4 mL", "7.5 mL"], "ans": 0, "rat": "1.5 g = 1,500 mg; 1,500 ÷ 250 = 6 mL."}, {"id": 83, "q": "Which task is most appropriate for an experienced nursing assistant?", "opts": ["Obtain routine vital signs on a stable postoperative patient", "Assess a newly confused patient", "Teach insulin self-administration", "Evaluate response to IV opioid therapy"], "ans": 0, "rat": "Routine vital signs on a stable patient can be delegated; assessment, teaching, and evaluation require a licensed nurse."}, {"id": 84, "q": "Which patient should be assigned to the most experienced nurse?", "opts": ["A patient with a fresh tracheostomy", "A stable patient awaiting discharge", "A patient needing routine bed-making", "A patient needing meal assistance"], "ans": 0, "rat": "Fresh tracheostomy patients have potentially life-threatening airway complications."}, {"id": 85, "q": "A nurse discovers that an incorrect medication dose was administered but the patient has no symptoms. What is the first priority?", "opts": ["Assess the patient and initiate appropriate safety/escalation procedures", "Alter the record to prevent concern", "Wait for symptoms", "Ask another nurse to document it"], "ans": 0, "rat": "Patient safety and assessment come first, followed by accurate reporting and documentation."}, {"id": 86, "q": "In an RCT, participants are assigned to intervention or control groups using a computer-generated sequence. What is this called?", "opts": ["Random allocation", "Blinding", "Convenience sampling", "Purposive sampling"], "ans": 0, "rat": "Random allocation assigns participants to study groups by chance."}, {"id": 87, "q": "A screening test has high sensitivity. What does this mean?", "opts": ["It detects a high proportion of people who truly have the disease", "It correctly excludes nearly all healthy people", "A positive result always confirms disease", "Predictive value is independent of prevalence"], "ans": 0, "rat": "Sensitivity is the proportion of true cases correctly identified and mainly reduces false negatives."}, {"id": 88, "q": "A screening test has very high specificity. What is the best interpretation?", "opts": ["A positive result is less likely to be a false positive and can help rule in disease", "It detects almost every case", "It eliminates prevalence effects", "It guarantees high sensitivity"], "ans": 0, "rat": "Specificity is the proportion of disease-free people who test negative; high specificity means fewer false positives."}, {"id": 89, "q": "Students perform a sterile dressing change correctly in simulation but repeatedly contaminate the field clinically. Which evaluation method best identifies the gap?", "opts": ["Direct clinical observation using a structured competency checklist", "A written MCQ alone", "A satisfaction survey", "Attendance records"], "ans": 0, "rat": "Direct observation in the clinical environment identifies psychomotor and contextual performance gaps."}, {"id": 90, "q": "A competent patient refuses a recommended blood transfusion after understanding risks and alternatives. Which ethical principle is most directly involved?", "opts": ["Autonomy", "Justice", "Fidelity", "Veracity only"], "ans": 0, "rat": "Autonomy supports a competent patient's right to make informed treatment decisions, including refusal."}, {"id": 91, "q": "A competent adult asks that family not be told the diagnosis. What should the nurse do?", "opts": ["Respect confidentiality unless disclosure is authorized or legally required", "Tell family because they are relatives", "Post the diagnosis publicly", "Ask another patient to tell them"], "ans": 0, "rat": "Patient information is confidential unless disclosure is authorized or legally required."}, {"id": 92, "q": "During disaster triage, which patient is generally immediate/red?", "opts": ["A patient with an obstructed airway likely to survive with immediate intervention", "A deceased patient with no signs of life", "A patient with a superficial abrasion", "A patient needing delayed orthopedic follow-up"], "ans": 0, "rat": "Red/immediate patients have life-threatening but potentially survivable conditions requiring immediate intervention."}, {"id": 93, "q": "A nurse suspects elder abuse based on unexplained injuries and inconsistent explanations. What is the appropriate action?", "opts": ["Ensure safety and follow mandatory reporting/safeguarding procedures", "Confront the caregiver and promise secrecy", "Ignore it without written proof", "Document only the caregiver's account"], "ans": 0, "rat": "Suspected abuse requires objective documentation, safety assessment, and reporting according to applicable requirements."}, {"id": 94, "q": "A delirious patient repeatedly pulls at an IV line. Which intervention should be attempted first when safe?", "opts": ["Identify reversible causes and use least-restrictive measures such as reorientation and close observation", "Apply restraints immediately", "Sedate for convenience", "Remove all monitoring"], "ans": 0, "rat": "Delirium care prioritizes treating causes and using nonpharmacologic, least-restrictive interventions."}, {"id": 95, "q": "A patient with major depression says, 'I have decided exactly how I will kill myself tonight.' What is the priority?", "opts": ["Initiate immediate suicide precautions and ensure the patient is not left alone", "Promise absolute confidentiality", "Use a no-suicide contract and leave the patient alone", "Change the subject"], "ans": 0, "rat": "A specific imminent suicide plan represents high risk and requires immediate safety measures and emergency psychiatric assessment."}, {"id": 96, "q": "A patient with septic shock has received norepinephrine through a peripheral IV. The site becomes pale, cool, and painful. What complication should be suspected?", "opts": ["Extravasation with local vasoconstriction", "Expected therapeutic response", "Fluid overload at the IV site", "Hypoglycemia"], "ans": 0, "rat": "Norepinephrine extravasation can cause severe local ischemia and requires immediate protocol-based management."}, {"id": 97, "q": "A patient with acute kidney injury has metabolic acidosis and refractory hyperkalemia despite medical therapy. Which finding most strongly supports urgent renal replacement therapy?", "opts": ["Persistent life-threatening hyperkalemia despite appropriate medical treatment", "Creatinine elevation alone", "Mild peripheral edema", "BUN elevation without symptoms"], "ans": 0, "rat": "Refractory life-threatening electrolyte or acid-base abnormalities are major indications for urgent dialysis."}, {"id": 98, "q": "A patient with a new ileostomy has output of 2.5 L/day and dizziness on standing. Which problem is most likely?", "opts": ["High-output stoma causing volume and electrolyte depletion", "Normal mature ileostomy function", "Acute pulmonary edema", "SIADH"], "ans": 0, "rat": "High ileostomy output can cause significant fluid and sodium losses and orthostatic symptoms."}, {"id": 99, "q": "A patient with a femoral fracture suddenly develops hypoxemia, confusion, and a petechial rash on the upper chest. What is most likely?", "opts": ["Fat embolism syndrome", "Massive hemothorax", "Tension pneumothorax", "Acute bacterial pneumonia"], "ans": 0, "rat": "The classic triad includes respiratory distress, neurologic changes, and petechiae after long-bone fracture."}, {"id": 100, "q": "A patient with cirrhosis develops tense ascites, fever, abdominal pain, and worsening renal function. Which diagnostic procedure is most important?", "opts": ["Diagnostic paracentesis", "Routine upper GI endoscopy first", "Bronchoscopy", "Bone marrow biopsy"], "ans": 0, "rat": "New or worsening ascites with fever requires prompt paracentesis to evaluate for spontaneous bacterial peritonitis."}];
+let i=0, answers=Array(data.length).fill(null), submitted=false, remaining=5400;
+const L=['A','B','C','D'];
 
-let currentQuestion = 0;
-let answers = Array(data.length).fill(null);
-let submitted = false;
-let remaining = 90 * 60;
-let clock = null;
-
-const L = ['A', 'B', 'C', 'D'];
-
-function safe(value) {
-  return String(value).replace(/[&<>"]/g, m => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;'
-  }[m]));
+function safe(s){
+ return s.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
 }
-
-function render() {
-  if (submitted) return;
-
-  const d = data[currentQuestion];
-
-  document.getElementById('question').innerHTML =
-    '<div class="num">QUESTION ' +
-    (currentQuestion + 1) + ' OF ' + data.length + '</div>' +
-
-    '<div class="q">' + safe(d.q) + '</div>' +
-
-    d.opts.map((option, j) =>
-      '<label class="opt">' +
-      '<input type="radio" name="answer" value="' + j + '" ' +
-      (answers[currentQuestion] === j ? 'checked' : '') +
-      ' onchange="selectAnswer(' + j + ')">' +
-      '<span class="letter">' + L[j] + '.</span>' +
-      '<span>' + safe(option) + '</span>' +
-      '</label>'
-    ).join('') +
-
-    '<div class="actions">' +
-    '<button type="button" class="secondary" ' +
-    'onclick="goToPreviousQuestion()">← Previous</button>' +
-
-    '<button type="button" class="primary" ' +
-    'onclick="goToNextQuestion()">Next →</button>' +
-    '</div>';
-
-  renderNavigator();
+function render(){
+ const d=data[i];
+ document.getElementById('question').innerHTML =
+ '<div class="num">QUESTION '+d.id+' OF 100</div>'+
+ '<div class="q">'+safe(d.q)+'</div>'+
+ d.opts.map((o,j)=>
+ '<label class="opt"><input type="radio" name="o" value="'+j+'" '+
+ (answers[i]===j?'checked':'')+
+ ' onchange="selectAnswer('+j+')">'+
+ '<span class="letter">'+L[j]+'.</span><span>'+safe(o)+'</span></label>'
+ ).join('')+
+ '<div class="actions">'+
+ '<button class="secondary" onclick="prev()">← Previous</button>'+
+ '<button class="primary" onclick="next()">Next →</button></div>';
+ nav();
 }
-
-function selectAnswer(optionIndex) {
-  if (submitted) return;
-  answers[currentQuestion] = optionIndex;
-  renderNavigator();
+function nav(){
+ document.getElementById('nav').innerHTML=data.map((x,j)=>
+ '<button class="qn '+(answers[j]!==null?'done ':'')+
+ (j===i?'current':'')+'" onclick="goToQuestion('+j+')">'+(j+1)+'</button>'
+ ).join('');
 }
-
-function renderNavigator() {
-  if (submitted) return;
-
-  document.getElementById('nav').innerHTML =
-    data.map((d, index) => {
-      const answered =
-        answers[index] !== null ? 'done ' : '';
-
-      const active =
-        index === currentQuestion ? 'current' : '';
-
-      return '<button type="button" class="qn ' +
-        answered + active +
-        '" onclick="goToQuestion(' + index + ')">' +
-        (index + 1) +
-        '</button>';
-    }).join('');
+function next(){if(i<data.length-1){i++;render()}}
+function prev(){if(i>0){i--;render()}}
+function submitTest(){
+ if(submitted)return;
+ if(!confirm('Submit the test now?'))return;
+ submitted=true;clearInterval(clock);
+ let score=answers.reduce((s,a,j)=>s+(a===data[j].ans?1:0),0);
+ result(score);
 }
-
-function goToQuestion(index) {
-  if (submitted) return;
-
-  if (index >= 0 && index < data.length) {
-    currentQuestion = index;
-    render();
-  }
+function result(score){
+ let h='<section>'+
+ '<div class="card result"><div class="num">RESULT</div>'+
+ '<div class="score">'+score+' / 100</div>'+
+ '<p><b>'+score+'%</b> score • '+(100-score)+' incorrect/unanswered</p>'+
+ '<button class="primary" onclick="location.reload()">Retake Test</button></div>'+
+ '<div class="card result"><h2>Answer Review & Rationales</h2>';
+ data.forEach((d,j)=>{
+   let ok=answers[j]===d.ans;
+   h+='<div class="rev"><b>Q'+(j+1)+'. '+safe(d.q)+'</b>'+
+   '<p class="'+(ok?'good':'wrong')+'">'+
+   (ok?'✓ Correct':'✗ Incorrect / Unanswered')+
+   ' — Correct: '+L[d.ans]+'. '+safe(d.opts[d.ans])+'</p>'+
+   '<p><b>Rationale:</b> '+safe(d.rat)+'</p></div>';
+ });
+ h+='</div></section>';
+ document.getElementById('app').innerHTML=h;
 }
-
-function goToNextQuestion() {
-  if (submitted) return;
-
-  if (currentQuestion < data.length - 1) {
-    currentQuestion++;
-    render();
-  } else {
-    submitTest(false);
-  }
+function tick(){
+ if(submitted)return;
+ remaining--;
+ let m=Math.floor(remaining/60),s=remaining%60;
+ document.getElementById('timer').textContent=
+ String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+ if(remaining<=0)submitTest();
 }
-
-function goToPreviousQuestion() {
-  if (submitted) return;
-
-  if (currentQuestion > 0) {
-    currentQuestion--;
-    render();
-  }
-}
-
-function submitTest(autoSubmit = false) {
-  if (submitted) return;
-
-  if (!autoSubmit) {
-    const unanswered =
-      answers.filter(answer => answer === null).length;
-
-    const message = unanswered > 0
-      ? 'You have ' + unanswered +
-        ' unanswered questions. Submit test?'
-      : 'Submit the test now?';
-
-    if (!window.confirm(message)) return;
-  }
-
-  submitted = true;
-
-  if (clock !== null) {
-    clearInterval(clock);
-    clock = null;
-  }
-
-  const score = answers.reduce(
-    (total, answer, index) =>
-      total + (answer === data[index].ans ? 1 : 0),
-    0
-  );
-
-  showResult(score);
-}
-
-function showResult(score) {
-  const attempted =
-    answers.filter(answer => answer !== null).length;
-
-  const incorrect = attempted - score;
-  const skipped = data.length - attempted;
-
-  let html =
-    '<section>' +
-    '<div class="card result">' +
-    '<div class="num">MOCK TEST 1 RESULT</div>' +
-    '<div class="score">' +
-    score + ' / ' + data.length +
-    '</div>' +
-
-    '<p><b>Correct:</b> ' + score +
-    ' | <b>Incorrect:</b> ' + incorrect +
-    ' | <b>Skipped:</b> ' + skipped +
-    '</p>' +
-
-    '<button type="button" class="primary" ' +
-    'onclick="location.reload()">Retake Test</button>' +
-    '</div>' +
-
-    '<div class="card result">' +
-    '<h2>Answer Review & Rationales</h2>';
-
-  data.forEach((d, index) => {
-    const selected = answers[index];
-    const correct = selected === d.ans;
-
-    html +=
-      '<div class="rev">' +
-      '<b>Q' + (index + 1) + '. ' +
-      safe(d.q) + '</b>' +
-
-      '<p class="' +
-      (correct ? 'good' : 'wrong') + '">' +
-
-      (selected === null
-        ? 'Skipped'
-        : 'Your Answer: ' +
-          L[selected] + '. ' +
-          safe(d.opts[selected])) +
-      '</p>' +
-
-      '<p><b>Correct Answer:</b> ' +
-      L[d.ans] + '. ' +
-      safe(d.opts[d.ans]) + '</p>' +
-
-      '<p><b>Rationale:</b> ' +
-      safe(d.rat) + '</p>' +
-      '</div>';
-  });
-
-  html += '</div></section>';
-
-  document.getElementById('app').innerHTML = html;
-}
-
-function updateTimer() {
-  const minutes = Math.floor(remaining / 60);
-  const seconds = remaining % 60;
-
-  document.getElementById('timer').textContent =
-    String(minutes).padStart(2, '0') + ':' +
-    String(seconds).padStart(2, '0');
-}
-
-function startTimer() {
-  updateTimer();
-
-  clock = setInterval(() => {
-    if (submitted) return;
-
-    remaining = Math.max(0, remaining - 1);
-    updateTimer();
-
-    if (remaining === 0) {
-      submitTest(true);
-    }
-  }, 1000);
-}
-
-startTimer();
+window.selectAnswer = (j) => { answers[i]=j; nav(); };
+window.goToQuestion = (j) => { if(j>=0 && j<data.length){i=j;render();} };
+window.next = next;
+window.prev = prev;
+window.submitTest = submitTest;
+const clock=setInterval(tick,1000);
 render();
-
+}
 </script>
 </body>
 </html>
