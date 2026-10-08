@@ -121,6 +121,21 @@ async function checkPremiumAccess(){
   const {data:{user},error:authError}=await sb.auth.getUser();
   if(authError||!user){window.location.replace("/login?next=%2Fmock-test-4.html");return false;}
   const {data,error}=await sb.from("purchases").select("id").eq("user_id",user.id).eq("status","paid").limit(1);
+  
+const {data,error}=await sb.from("purchases")
+  .select("id")
+  .eq("user_id",user.id)
+  .eq("status","paid")
+  .limit(1);
+
+if(error){
+  console.error("SUPABASE PURCHASE ERROR:",error);
+  gate("Verification unavailable",
+       "Could not verify your purchase. Please try again later.",
+       false);
+  return false;
+}
+
   if(error){gate("Verification unavailable","Could not verify your purchase. Please try again later.",false);return false;}
   if(!data?.length){gate("Premium Access Required","Mock Test 4 is available only after verified premium purchase.",false);return false;}
   document.getElementById("accessGate").remove();
