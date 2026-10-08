@@ -71,7 +71,7 @@ const SUPABASE_URL = "https://yctpbctqsvdjcrrovocs.supabase.co";
 const SUPABASE_KEY = "sb_publishable_HC09xf-cQ7yLa8wzJQjPTg_4pVGHoks";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const nextParam = new URLSearchParams(location.search).get("next");
-const nextPath = nextParam && nextParam.startsWith("/") ? nextParam : "/dashboard.html";
+const nextPath = nextParam && (/^\/(?:mock-test-[1-9]|mock-test-10|dashboard)\.html$/.test(nextParam) || /^\/upcoming\.html\?test=(?:[4-9]|10)$/.test(nextParam)) ? nextParam : "/dashboard.html";
 
 let mode = "login";
 
