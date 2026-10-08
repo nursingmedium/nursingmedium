@@ -39,7 +39,7 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 <div class="badge"><i class="dot"></i> PGIMER Nursing Officer • 2026</div>
 <h1>Prepare smarter.<br><span>Practice like the exam.</span></h1>
 <p class="lead">Exam-level Nursing Officer mock tests designed to improve accuracy, speed and confidence before the real exam.</p>
-<div class="hero-cta"><button class="btn primary" onclick="document.getElementById('package').scrollIntoView()">View Mock Series →</button><a class="btn outline" href="/mock-test-1">Try Mock Test 1</a></div>
+<div class="hero-cta"><button class="btn primary" onclick="document.getElementById('package').scrollIntoView()">View Mock Series →</button><a class="btn outline" href="/mock-test-1.html">Try Free Mock Test 1 →</a></div>
 <div class="trust"><span>✓ 100 Questions / Test</span><span>✓ 90 Minutes</span><span>✓ Detailed Explanations</span></div>
 </div>
 <div class="mock"><div class="mini"><span>PGIMER Mock 01</span><span>71:42</span></div><div class="progress"><i></i></div><div class="q"><div style="font-size:11px;color:#98a2b3;margin-bottom:10px">QUESTION 73 OF 100</div><h3>A patient receiving a blood transfusion develops chills and fever. What should the nurse do first?</h3><div class="opt">A. Slow the transfusion rate</div><div class="opt good">B. Stop the transfusion immediately</div><div class="opt">C. Administer an antipyretic</div><div class="opt">D. Reassure the patient</div></div></div>
@@ -48,22 +48,22 @@ footer{padding:35px 0;color:#667085;font-size:13px;border-top:1px solid var(--li
 <section id="features"><div class="container"><div class="head"><h2>Built for serious Nursing Officer preparation</h2><p>Everything you need to turn practice into measurable improvement.</p></div>
 <div class="stats"><div class="stat"><b>10</b><span>Full-length mock tests</span></div><div class="stat"><b>1000+</b><span>Practice questions planned</span></div><div class="stat"><b>90 min</b><span>Realistic timed experience</span></div><div class="stat"><b>24×7</b><span>Practice from any device</span></div></div></div></section>
 
-<section id="package"><div class="container"><div class="head"><h2>PGIMER Nursing Officer Mock Series</h2><p>Start with the complete beta package and build exam confidence one test at a time.</p></div>
+<section id="package"><div class="container"><div class="head"><h2>Go Beyond the Free Mock</h2><p>Try Mock Test 1 free, then unlock 9 additional full-length PGIMER Nursing Officer mock tests for serious exam preparation.</p></div>
 <div class="package"><div class="features"><h3>What's included</h3><div class="feature-grid">
-<div class="feature"><b>10 Full Tests</b><span>100 questions per mock with a 90-minute timer.</span></div>
+<div class="feature"><b>9 Premium Tests</b><span>Unlock Mock Tests 2–10 with 100 questions and a 90-minute timer.</span></div>
 <div class="feature"><b>Detailed Rationales</b><span>Understand why the correct answer is correct.</span></div>
 <div class="feature"><b>Performance Analytics</b><span>Track score, accuracy, time and weak areas.</span></div>
 <div class="feature"><b>Answer Review</b><span>Review attempted, skipped and incorrect questions.</span></div>
 <div class="feature"><b>Mobile Friendly</b><span>Practice on phone, tablet or desktop.</span></div>
 <div class="feature"><b>Expert Review</b><span>Questions can be reviewed by a nursing subject expert.</span></div>
 </div></div>
-<div class="price"><div class="popular">BETA LAUNCH</div><div style="color:#667085;font-size:13px;margin-top:18px">PGIMER Mock Test Series</div><div class="amount">₹399</div><div class="old">₹799</div>
-<ul class="checks"><li>10 full-length mocks</li><li>100 questions each</li><li>Detailed explanations</li><li>Result & performance review</li><li>Access from any device</li></ul>
-<a class="btn primary" style="display:block;text-align:center;width:100%" href="/mock-test-1">Start Mock Test 1 →</a><div style="font-size:11px;color:#98a2b3;text-align:center;margin-top:12px">Payment will be connected in the next setup step.</div></div></div></div></section>
+<div class="price"><div class="popular">BETA LAUNCH</div><div style="color:#667085;font-size:13px;margin-top:18px">PGIMER Premium Mock Series</div><div class="amount">₹399</div><div class="old">₹799</div>
+<ul class="checks"><li>9 premium full-length mocks</li><li>100 questions each</li><li>Detailed explanations</li><li>Result & performance review</li><li>Access from any device</li></ul>
+<a class="btn primary" style="display:block;text-align:center;width:100%" href="#tests">Unlock 9 Premium Mock Tests →</a><div style="font-size:11px;color:#98a2b3;text-align:center;margin-top:12px">Mock Test 1 is free. Payment unlocks Mock Tests 2–10.</div></div></div></div></section>
 
-<section id="tests"><div class="container"><div class="head"><h2>Your mock test roadmap</h2><p>A simple progression from Mock 01 to Mock 10.</p></div><div class="tests" id="testGrid"></div></div></section>
+<section id="tests"><div class="container"><div class="head"><h2>Your mock test roadmap</h2><p>Start with Mock 01 for free. Unlock Mock 02–10 with the premium package.</p></div><div class="tests" id="testGrid"></div></div></section>
 
-<section id="contact"><div class="container"><div class="cta"><div><h2>Ready to start your preparation?</h2><p>Join Nursing Medium and practice with a focused mock-test experience.</p></div><button class="btn primary" onclick="goToLogin()">Create Student Account →</button></div></div></section>
+<section id="contact"><div class="container"><div class="cta"><div><h2>Ready to start your preparation?</h2><p>Join Nursing Medium and practice with a focused mock-test experience.</p></div><a class="btn primary" href="/mock-test-1.html">Start Your Free Mock Test →</a></div></div></section>
 </main>
 <footer><div class="container">© 2026 Nursing Medium. All rights reserved.</div></footer>
 
@@ -81,7 +81,7 @@ for(let i=1;i<=10;i++){
     <h3>PGIMER Mock Test ${n}</h3>
     <p>Full-length Nursing Officer practice test.</p>
     <span class="tag">100 Questions</span> <span class="tag">90 Minutes</span>
-    ${live ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-${i}.html">Start Mock Test ${i} →</a>` : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
+    ${live ? (i===1 ? `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/mock-test-1.html">Try Free Mock Test 1 →</a>` : `<a class="btn primary" style="display:block;text-align:center;margin-top:16px" href="/login">Unlock Mock Test ${i} →</a>`) : `<button class="btn outline" style="width:100%;margin-top:16px" onclick="comingSoon()">Coming Soon</button>`}
   </div>`;
 }
 function goToLogin(){window.location.href='/login'}
